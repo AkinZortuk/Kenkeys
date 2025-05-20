@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeyCraft | Custom Keyboard Builder</title>
+    <title>Keyboard Brothers | Premium Custom Keyboard Builder</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #34495e;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #1a1a1a;
-            --text: #333333;
-            --text-light: #7f8c8d;
+            --black: #121212;
+            --dark-gray: #1e1e1e;
+            --medium-gray: #2d2d2d;
+            --light-gray: #3d3d3d;
+            --lighter-gray: #4d4d4d;
+            --lightest-gray: #5d5d5d;
+            --white: #f0f0f0;
+            --accent: #ffffff;
         }
         
         * {
@@ -25,30 +26,44 @@
         
         body {
             font-family: 'Montserrat', sans-serif;
-            color: var(--text);
-            background-color: #f5f5f5;
+            color: var(--white);
+            background-color: var(--black);
             line-height: 1.6;
         }
         
         header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
+            background-color: var(--dark-gray);
+            padding: 1.5rem 3rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--light-gray);
         }
         
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             text-decoration: none;
         }
         
-        .logo span {
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--white);
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+        
+        .logo-text span {
             color: var(--accent);
+            font-style: italic;
         }
         
         nav ul {
@@ -57,237 +72,449 @@
         }
         
         nav ul li {
-            margin-left: 1.5rem;
+            margin-left: 2rem;
+            position: relative;
         }
         
         nav ul li a {
-            color: white;
+            color: var(--white);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
         }
         
         nav ul li a:hover {
             color: var(--accent);
         }
         
+        nav ul li::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+        
+        nav ul li:hover::after {
+            width: 100%;
+        }
+        
         .container {
-            max-width: 1200px;
+            max-width: 1600px;
             margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 0 2rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            color: var(--white);
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--lightest-gray);
+            font-weight: 400;
         }
         
         .builder-container {
             display: flex;
-            flex-wrap: wrap;
             gap: 2rem;
+            height: calc(100vh - 200px);
+            min-height: 700px;
+        }
+        
+        .controls {
+            width: 320px;
+            background-color: var(--dark-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--light-gray);
+            overflow-y: auto;
         }
         
         .keyboard-display {
             flex: 1;
-            min-width: 300px;
-            background-color: white;
+            background-color: var(--dark-gray);
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--light-gray);
             padding: 2rem;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            position: relative;
         }
         
         .keyboard {
             width: 100%;
-            background-color: var(--light);
+            height: 100%;
+            background-color: var(--medium-gray);
             border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
             position: relative;
             overflow: hidden;
         }
         
         .keyboard canvas {
             width: 100%;
-            height: auto;
+            height: 100%;
             display: block;
-        }
-        
-        .controls {
-            flex: 1;
-            min-width: 300px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
         }
         
         .control-section {
             margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .control-section:last-child {
+            border-bottom: none;
         }
         
         .control-section h3 {
-            margin-bottom: 1rem;
-            color: var(--primary);
-            border-bottom: 2px solid var(--light);
-            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .control-section h3 i {
+            color: var(--accent);
         }
         
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--lightest-gray);
         }
         
         select, input, textarea {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--light-gray);
             border-radius: 4px;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            background-color: var(--medium-gray);
+            color: var(--white);
+            transition: all 0.3s;
         }
         
-        .color-picker {
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+        
+        .color-picker-container {
             display: flex;
             align-items: center;
             gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .color-picker-container label {
+            margin-bottom: 0;
+            flex: 1;
+        }
+        
+        .color-picker {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid var(--light-gray);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
         
         .color-picker input[type="color"] {
-            width: 50px;
-            height: 50px;
-            padding: 0;
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: 40px;
+            height: 40px;
             border: none;
             cursor: pointer;
+            opacity: 0;
+        }
+        
+        .color-preview {
+            width: 100%;
+            height: 100%;
+            border-radius: 3px;
         }
         
         .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
+            background-color: var(--medium-gray);
+            color: var(--white);
+            border: 1px solid var(--light-gray);
             padding: 0.8rem 1.5rem;
             border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .btn:hover {
-            background-color: var(--secondary);
+            background-color: var(--light-gray);
+            border-color: var(--lighter-gray);
         }
         
         .btn-accent {
-            background-color: var(--accent);
+            background-color: var(--white);
+            color: var(--black);
+            border-color: var(--white);
         }
         
         .btn-accent:hover {
-            background-color: #c0392b;
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .btn-danger {
+            background-color: #3d2d2d;
+            color: #ff6b6b;
+            border-color: #5d3d3d;
+        }
+        
+        .btn-danger:hover {
+            background-color: #5d3d3d;
+            border-color: #7d5d5d;
         }
         
         .color-groups {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 1rem;
         }
         
         .color-group {
-            border: 1px solid #ddd;
+            border: 1px solid var(--light-gray);
             padding: 1rem;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s;
+            background-color: var(--medium-gray);
         }
         
         .color-group:hover {
-            border-color: var(--primary);
+            border-color: var(--lighter-gray);
         }
         
         .color-group.active {
             border-color: var(--accent);
-            background-color: rgba(231, 76, 60, 0.1);
+            background-color: var(--light-gray);
+            box-shadow: 0 0 0 1px var(--accent);
         }
         
         .color-group h4 {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--white);
+            font-weight: 500;
         }
         
         .layout-options {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.75rem;
         }
         
         .layout-option {
             flex: 1;
-            min-width: 120px;
+            min-width: 60px;
             text-align: center;
-            padding: 1rem;
-            border: 1px solid #ddd;
+            padding: 0.8rem 0.5rem;
+            border: 1px solid var(--light-gray);
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 0.85rem;
+            background-color: var(--medium-gray);
         }
         
         .layout-option:hover {
-            border-color: var(--primary);
+            border-color: var(--lighter-gray);
         }
         
         .layout-option.active {
             border-color: var(--accent);
-            background-color: rgba(231, 76, 60, 0.1);
+            background-color: var(--light-gray);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+        
+        .image-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .image-controls .btn {
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .slider-container input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            background: var(--medium-gray);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--white);
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            width: 40px;
+            text-align: center;
+            font-size: 0.9rem;
         }
         
         footer {
-            background-color: var(--primary);
-            color: white;
+            background-color: var(--dark-gray);
+            color: var(--white);
             text-align: center;
-            padding: 2rem;
-            margin-top: 2rem;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--lightest-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            color: var(--lightest-gray);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .builder-container {
+                flex-direction: column;
+                height: auto;
+                min-height: auto;
+            }
+            
+            .controls {
+                width: 100%;
+                order: 2;
+            }
+            
+            .keyboard-display {
+                height: 500px;
+                order: 1;
+            }
         }
         
         @media (max-width: 768px) {
-            .builder-container {
+            header {
+                padding: 1rem 1.5rem;
                 flex-direction: column;
+                gap: 1rem;
             }
             
             nav ul {
-                display: none;
+                gap: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 0;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="#" class="logo">Key<span>Craft</span></a>
+        <a href="#" class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-keyboard"></i>
+            </div>
+            <div class="logo-text">Keyboard <span>Brothers</span></div>
+        </a>
         <nav>
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Products</a></li>
-                <li><a href="#">Deals</a></li>
                 <li><a href="#">Gallery</a></li>
                 <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
         </nav>
     </header>
     
     <div class="container">
-        <h1>Custom Keyboard Builder</h1>
-        <p>Design your perfect keyboard with our easy-to-use customizer.</p>
+        <h1 class="page-title">Custom Keyboard Builder</h1>
+        <p class="page-subtitle">Design your perfect mechanical keyboard with our premium customization tools</p>
         
         <div class="builder-container">
-            <div class="keyboard-display">
-                <div class="keyboard">
-                    <canvas id="keyboardCanvas" width="800" height="300"></canvas>
-                </div>
-                <button id="downloadBtn" class="btn btn-accent">Download Design</button>
-            </div>
-            
             <div class="controls">
                 <div class="control-section">
-                    <h3>Keyboard Layout</h3>
+                    <h3><i class="fas fa-keyboard"></i> Keyboard Layout</h3>
                     <div class="form-group">
                         <label for="layoutType">Layout Type</label>
                         <select id="layoutType">
@@ -319,32 +546,56 @@
                 </div>
                 
                 <div class="control-section">
-                    <h3>Keycap Colors</h3>
+                    <h3><i class="fas fa-palette"></i> Keycap Colors</h3>
                     <div class="form-group">
                         <label>Select color group to edit:</label>
                         <div class="color-groups">
                             <div class="color-group active" data-group="main">
                                 <h4>Main Keys</h4>
-                                <input type="color" id="mainColor" value="#cccccc">
+                                <div class="color-picker-container">
+                                    <label>Color:</label>
+                                    <div class="color-picker">
+                                        <div class="color-preview" style="background-color: #cccccc;" id="mainColorPreview"></div>
+                                        <input type="color" id="mainColor" value="#cccccc">
+                                    </div>
+                                </div>
                             </div>
                             <div class="color-group" data-group="modifiers">
                                 <h4>Modifiers</h4>
-                                <input type="color" id="modifiersColor" value="#999999">
+                                <div class="color-picker-container">
+                                    <label>Color:</label>
+                                    <div class="color-picker">
+                                        <div class="color-preview" style="background-color: #999999;" id="modifiersColorPreview"></div>
+                                        <input type="color" id="modifiersColor" value="#999999">
+                                    </div>
+                                </div>
                             </div>
                             <div class="color-group" data-group="spacebar">
                                 <h4>Spacebar</h4>
-                                <input type="color" id="spacebarColor" value="#666666">
+                                <div class="color-picker-container">
+                                    <label>Color:</label>
+                                    <div class="color-picker">
+                                        <div class="color-preview" style="background-color: #666666;" id="spacebarColorPreview"></div>
+                                        <input type="color" id="spacebarColor" value="#666666">
+                                    </div>
+                                </div>
                             </div>
                             <div class="color-group" data-group="accents">
                                 <h4>Accent Keys</h4>
-                                <input type="color" id="accentsColor" value="#e74c3c">
+                                <div class="color-picker-container">
+                                    <label>Color:</label>
+                                    <div class="color-picker">
+                                        <div class="color-preview" style="background-color: #e74c3c;" id="accentsColorPreview"></div>
+                                        <input type="color" id="accentsColor" value="#e74c3c">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="control-section">
-                    <h3>Keyboard Layout Text</h3>
+                    <h3><i class="fas fa-font"></i> Key Legends</h3>
                     <div class="form-group">
                         <label for="keyboardLayout">Key Layout</label>
                         <select id="keyboardLayout">
@@ -356,7 +607,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="textPosition">Text Position</label>
+                        <label for="textPosition">Legend Position</label>
                         <div class="layout-options">
                             <div class="layout-option active" data-position="top-left">Top Left</div>
                             <div class="layout-option" data-position="center">Center</div>
@@ -365,32 +616,80 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="textColor">Text Color</label>
-                        <input type="color" id="textColor" value="#000000">
+                        <label for="textColor">Legend Color</label>
+                        <div class="color-picker-container">
+                            <input type="color" id="textColor" value="#000000">
+                            <label>Black</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="textSize">Legend Size</label>
+                        <div class="slider-container">
+                            <input type="range" id="textSize" min="8" max="24" value="12">
+                            <span class="slider-value" id="textSizeValue">12px</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="textOpacity">Legend Opacity</label>
+                        <div class="slider-container">
+                            <input type="range" id="textOpacity" min="0" max="100" value="100">
+                            <span class="slider-value" id="textOpacityValue">100%</span>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="control-section">
-                    <h3>Custom Image</h3>
+                    <h3><i class="fas fa-image"></i> Custom Image</h3>
                     <div class="form-group">
                         <label for="keyboardImage">Upload Image</label>
                         <input type="file" id="keyboardImage" accept="image/*">
                     </div>
                     <div class="form-group">
+                        <label for="imagePosition">Image Position</label>
+                        <select id="imagePosition">
+                            <option value="full">Full Keyboard</option>
+                            <option value="top-half">Top Half</option>
+                            <option value="bottom-half">Bottom Half</option>
+                            <option value="left-side">Left Side</option>
+                            <option value="right-side">Right Side</option>
+                            <option value="spacebar">Spacebar Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageSize">Image Size</label>
+                        <select id="imageSize">
+                            <option value="fit">Fit to Area</option>
+                            <option value="stretch">Stretch to Fill</option>
+                            <option value="original">Original Size</option>
+                            <option value="repeat">Repeat Pattern</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="imageOpacity">Image Opacity</label>
-                        <input type="range" id="imageOpacity" min="0" max="100" value="50">
+                        <div class="slider-container">
+                            <input type="range" id="imageOpacity" min="0" max="100" value="50">
+                            <span class="slider-value" id="imageOpacityValue">50%</span>
+                        </div>
+                    </div>
+                    <div class="image-controls">
+                        <button id="removeImageBtn" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
                     </div>
                 </div>
                 
                 <div class="control-section">
-                    <h3>Custom Text</h3>
+                    <h3><i class="fas fa-text-height"></i> Custom Text</h3>
                     <div class="form-group">
                         <label for="customText">Text to Add</label>
                         <input type="text" id="customText" placeholder="Enter custom text">
                     </div>
                     <div class="form-group">
                         <label for="customTextColor">Text Color</label>
-                        <input type="color" id="customTextColor" value="#000000">
+                        <div class="color-picker-container">
+                            <input type="color" id="customTextColor" value="#ffffff">
+                            <label>White</label>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="customTextPosition">Text Position</label>
@@ -398,15 +697,58 @@
                             <option value="spacebar">Spacebar</option>
                             <option value="top-case">Top Case</option>
                             <option value="bottom-case">Bottom Case</option>
+                            <option value="left-side">Left Side</option>
+                            <option value="right-side">Right Side</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="customTextSize">Text Size</label>
+                        <div class="slider-container">
+                            <input type="range" id="customTextSize" min="8" max="48" value="16">
+                            <span class="slider-value" id="customTextSizeValue">16px</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customTextOpacity">Text Opacity</label>
+                        <div class="slider-container">
+                            <input type="range" id="customTextOpacity" min="0" max="100" value="100">
+                            <span class="slider-value" id="customTextOpacityValue">100%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <button id="downloadBtn" class="btn btn-accent" style="width: 100%;">
+                        <i class="fas fa-download"></i> Download Design
+                    </button>
+                </div>
+            </div>
+            
+            <div class="keyboard-display">
+                <div class="keyboard">
+                    <canvas id="keyboardCanvas" width="1000" height="400"></canvas>
                 </div>
             </div>
         </div>
     </div>
     
     <footer>
-        <p>&copy; 2023 KeyCraft. All rights reserved.</p>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Gallery</a>
+                <a href="#">About Us</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Keyboard Brothers. All rights reserved.
+            </div>
+        </div>
     </footer>
 
     <script>
@@ -417,8 +759,55 @@
             let currentColorGroup = 'main';
             let uploadedImage = null;
             
-            // Initialize keyboard
+            // Initialize keyboard with full layout
             drawKeyboard();
+            
+            // Update slider value displays
+            document.getElementById('textSize').addEventListener('input', function() {
+                document.getElementById('textSizeValue').textContent = this.value + 'px';
+                drawKeyboard();
+            });
+            
+            document.getElementById('textOpacity').addEventListener('input', function() {
+                document.getElementById('textOpacityValue').textContent = this.value + '%';
+                drawKeyboard();
+            });
+            
+            document.getElementById('imageOpacity').addEventListener('input', function() {
+                document.getElementById('imageOpacityValue').textContent = this.value + '%';
+                drawKeyboard();
+            });
+            
+            document.getElementById('customTextSize').addEventListener('input', function() {
+                document.getElementById('customTextSizeValue').textContent = this.value + 'px';
+                drawKeyboard();
+            });
+            
+            document.getElementById('customTextOpacity').addEventListener('input', function() {
+                document.getElementById('customTextOpacityValue').textContent = this.value + '%';
+                drawKeyboard();
+            });
+            
+            // Update color previews when color changes
+            document.getElementById('mainColor').addEventListener('input', function() {
+                document.getElementById('mainColorPreview').style.backgroundColor = this.value;
+                drawKeyboard();
+            });
+            
+            document.getElementById('modifiersColor').addEventListener('input', function() {
+                document.getElementById('modifiersColorPreview').style.backgroundColor = this.value;
+                drawKeyboard();
+            });
+            
+            document.getElementById('spacebarColor').addEventListener('input', function() {
+                document.getElementById('spacebarColorPreview').style.backgroundColor = this.value;
+                drawKeyboard();
+            });
+            
+            document.getElementById('accentsColor').addEventListener('input', function() {
+                document.getElementById('accentsColorPreview').style.backgroundColor = this.value;
+                drawKeyboard();
+            });
             
             // Event listeners for layout changes
             document.getElementById('layoutType').addEventListener('change', function() {
@@ -504,7 +893,15 @@
                 }
             });
             
-            document.getElementById('imageOpacity').addEventListener('input', drawKeyboard);
+            document.getElementById('imagePosition').addEventListener('change', drawKeyboard);
+            document.getElementById('imageSize').addEventListener('change', drawKeyboard);
+            
+            // Remove image
+            document.getElementById('removeImageBtn').addEventListener('click', function() {
+                uploadedImage = null;
+                document.getElementById('keyboardImage').value = '';
+                drawKeyboard();
+            });
             
             // Custom text
             document.getElementById('customText').addEventListener('input', drawKeyboard);
@@ -524,7 +921,7 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 // Draw keyboard base
-                ctx.fillStyle = '#333333';
+                ctx.fillStyle = '#1a1a1a';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
                 // Draw keys based on layout
@@ -534,6 +931,7 @@
                 const spacebarColor = document.getElementById('spacebarColor').value;
                 const accentsColor = document.getElementById('accentsColor').value;
                 
+                // Draw all keys for the selected layout
                 layout.keys.forEach(key => {
                     // Determine key color
                     let color = mainColor;
@@ -551,7 +949,8 @@
                     const textPosition = document.querySelector('.layout-option.active').dataset.position;
                     if (textPosition !== 'none' && key.label) {
                         ctx.fillStyle = document.getElementById('textColor').value;
-                        ctx.font = '12px Arial';
+                        ctx.globalAlpha = document.getElementById('textOpacity').value / 100;
+                        ctx.font = document.getElementById('textSize').value + 'px Arial';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
                         
@@ -559,116 +958,104 @@
                         let textY = key.y + key.height / 2;
                         
                         if (textPosition === 'top-left') {
-                            textX = key.x + 5;
-                            textY = key.y + 12;
+                            textX = key.x + 8;
+                            textY = key.y + 15;
                             ctx.textAlign = 'left';
                         } else if (textPosition === 'side') {
-                            textX = key.x + 5;
+                            textX = key.x + 8;
                             textY = key.y + key.height / 2;
                             ctx.textAlign = 'left';
                         }
                         
                         ctx.fillText(key.label, textX, textY);
+                        ctx.globalAlpha = 1.0;
                     }
                 });
                 
                 // Draw custom image if uploaded
                 if (uploadedImage) {
                     const opacity = document.getElementById('imageOpacity').value / 100;
+                    const position = document.getElementById('imagePosition').value;
+                    const size = document.getElementById('imageSize').value;
+                    
                     ctx.globalAlpha = opacity;
-                    ctx.drawImage(uploadedImage, 0, 0, canvas.width, canvas.height);
+                    
+                    let x = 0, y = 0, width = canvas.width, height = canvas.height;
+                    
+                    // Adjust position based on selection
+                    if (position === 'top-half') {
+                        height = canvas.height / 2;
+                    } else if (position === 'bottom-half') {
+                        y = canvas.height / 2;
+                        height = canvas.height / 2;
+                    } else if (position === 'left-side') {
+                        width = canvas.width / 2;
+                    } else if (position === 'right-side') {
+                        x = canvas.width / 2;
+                        width = canvas.width / 2;
+                    } else if (position === 'spacebar') {
+                        // Find spacebar dimensions (simplified for prototype)
+                        const spacebar = layout.keys.find(k => k.type === 'spacebar');
+                        if (spacebar) {
+                            x = spacebar.x;
+                            y = spacebar.y;
+                            width = spacebar.width;
+                            height = spacebar.height;
+                        }
+                    }
+                    
+                    // Adjust size based on selection
+                    if (size === 'original') {
+                        const ratio = Math.min(width / uploadedImage.width, height / uploadedImage.height);
+                        const newWidth = uploadedImage.width * ratio;
+                        const newHeight = uploadedImage.height * ratio;
+                        
+                        ctx.drawImage(
+                            uploadedImage, 
+                            x + (width - newWidth) / 2, 
+                            y + (height - newHeight) / 2, 
+                            newWidth, 
+                            newHeight
+                        );
+                    } else if (size === 'fit') {
+                        const imgRatio = uploadedImage.width / uploadedImage.height;
+                        const areaRatio = width / height;
+                        
+                        if (imgRatio > areaRatio) {
+                            // Image is wider than area
+                            const newHeight = width / imgRatio;
+                            ctx.drawImage(
+                                uploadedImage, 
+                                x, 
+                                y + (height - newHeight) / 2, 
+                                width, 
+                                newHeight
+                            );
+                        } else {
+                            // Image is taller than area
+                            const newWidth = height * imgRatio;
+                            ctx.drawImage(
+                                uploadedImage, 
+                                x + (width - newWidth) / 2, 
+                                y, 
+                                newWidth, 
+                                height
+                            );
+                        }
+                    } else if (size === 'repeat') {
+                        // Create pattern
+                        const pattern = ctx.createPattern(uploadedImage, 'repeat');
+                        ctx.fillStyle = pattern;
+                        ctx.fillRect(x, y, width, height);
+                    } else {
+                        // Stretch (default)
+                        ctx.drawImage(uploadedImage, x, y, width, height);
+                    }
+                    
                     ctx.globalAlpha = 1.0;
                 }
                 
                 // Draw custom text
                 const customText = document.getElementById('customText').value;
                 if (customText) {
-                    const textColor = document.getElementById('customTextColor').value;
-                    const position = document.getElementById('customTextPosition').value;
-                    
-                    ctx.fillStyle = textColor;
-                    ctx.font = 'bold 16px Arial';
-                    ctx.textAlign = 'center';
-                    
-                    let textY;
-                    if (position === 'spacebar') {
-                        textY = canvas.height - 30;
-                    } else if (position === 'top-case') {
-                        textY = 30;
-                    } else {
-                        textY = canvas.height - 10;
-                    }
-                    
-                    ctx.fillText(customText, canvas.width / 2, textY);
-                }
-            }
-            
-            // Keyboard layout definitions
-            function getLayout(layoutType) {
-                const layouts = {
-                    // ISO layouts
-                    'iso-109': getISO109Layout(),
-                    'iso-105': getISO105Layout(),
-                    'iso-101': getISO101Layout(),
-                    'iso-88': getISO88Layout(),
-                    'iso-85': getISO85Layout(),
-                    'iso-69': getISO69Layout(),
-                    'iso-62': getISO62Layout(),
-                    // ANSI layouts
-                    'ansi-108': getANSI108Layout(),
-                    'ansi-104': getANSI104Layout(),
-                    'ansi-100': getANSI100Layout(),
-                    'ansi-87': getANSI87Layout(),
-                    'ansi-84': getANSI84Layout(),
-                    'ansi-68': getANSI68Layout(),
-                    'ansi-61': getANSI61Layout()
-                };
-                
-                return layouts[layoutType] || layouts['iso-109'];
-            }
-            
-            // Sample layout definitions (simplified for prototype)
-            function getISO109Layout() {
-                return {
-                    name: "ISO 109-key",
-                    keys: [
-                        // First row
-                        {x: 10, y: 10, width: 40, height: 40, type: 'modifier', label: 'Esc'},
-                        {x: 60, y: 10, width: 40, height: 40, label: '1'},
-                        {x: 110, y: 10, width: 40, height: 40, label: '2'},
-                        // ... more keys would be defined here
-                        // Spacebar
-                        {x: 150, y: 200, width: 300, height: 40, type: 'spacebar'}
-                    ]
-                };
-            }
-            
-            function getISO105Layout() {
-                // Similar to 109 but with fewer keys
-                return {
-                    name: "ISO 105-key",
-                    keys: [
-                        // ... key definitions
-                    ]
-                };
-            }
-            
-            // Other layout functions would follow similar pattern
-            // For prototype, we'll just return empty layouts
-            
-            function getISO101Layout() { return {name: "ISO 101-key", keys: []}; }
-            function getISO88Layout() { return {name: "ISO 88-key", keys: []}; }
-            function getISO85Layout() { return {name: "ISO 85-key", keys: []}; }
-            function getISO69Layout() { return {name: "ISO 69-key", keys: []}; }
-            function getISO62Layout() { return {name: "ISO 62-key", keys: []}; }
-            function getANSI108Layout() { return {name: "ANSI 108-key", keys: []}; }
-            function getANSI104Layout() { return {name: "ANSI 104-key", keys: []}; }
-            function getANSI100Layout() { return {name: "ANSI 100-key", keys: []}; }
-            function getANSI87Layout() { return {name: "ANSI 87-key", keys: []}; }
-            function getANSI84Layout() { return {name: "ANSI 84-key", keys: []}; }
-            function getANSI68Layout() { return {name: "ANSI 68-key", keys: []}; }
-            function getANSI61Layout() { return {name: "ANSI 61-key", keys: []}; }
-        });
-    </script>
-</body>
-</html>
+                    const textColor
