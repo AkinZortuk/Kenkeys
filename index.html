@@ -2,235 +2,160 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Keyboard Customizer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Keyboard Builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
-    /* Basic premium feel */
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #1c1c1c, #2e2e2e);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    .controls, .color-groups, .layout-controls, .download-btn {
-      margin: 10px;
-    }
-
-    .keyboard-container {
-      position: relative;
-      margin: 20px auto;
-      border: 2px solid #555;
-      padding: 20px;
-      background-color: #111;
-      border-radius: 10px;
-    }
-
-    .keyboard {
-      display: grid;
-      grid-template-columns: repeat(15, 40px);
-      grid-gap: 5px;
-      justify-content: center;
-    }
-
     .key {
-      width: 40px;
-      height: 40px;
-      background-color: #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: black;
-      font-weight: bold;
-      border-radius: 4px;
       user-select: none;
+      cursor: pointer;
     }
-
-    /* Overlay image and text for customizations */
-    #customImage {
-      position: absolute;
-      top: 0;
-      left: 0;
-      max-width: 100%;
-      max-height: 100%;
-      opacity: 0.5;
-      pointer-events: none;
+    .key:hover {
+      filter: brightness(1.2);
     }
-
-    #customText {
-      position: absolute;
-      font-size: 24px;
+    .group-label {
       font-weight: bold;
-      pointer-events: none;
+      margin-top: 0.5rem;
     }
   </style>
 </head>
-<body>
-  <h1>Keyboard Customizer</h1>
+<body class="bg-gray-900 text-white">
+  <!-- Sidebar Customizer Panel -->
+  <div class="flex">
+    <aside class="w-64 bg-gray-800 p-4 h-screen overflow-y-auto">
+      <h2 class="text-xl mb-4 font-semibold">Customizer Panel</h2>
 
-  <!-- Layout and type switcher -->
-  <div class="controls">
-    <label for="layoutSelect">Layout:</label>
-    <select id="layoutSelect">
-      <option value="ansi">ANSI</option>
-      <option value="iso">ISO</option>
-    </select>
+      <!-- Layout Selector -->
+      <label class="block mb-2 text-sm">Select Layout:</label>
+      <select id="layoutSelector" class="w-full mb-4 p-2 bg-gray-700 text-white rounded">
+        <optgroup label="ISO Layouts">
+          <option value="iso_109">109-key ISO (Full)</option>
+          <option value="iso_105">105-key ISO</option>
+          <option value="iso_101_1800">101-key ISO 1800</option>
+          <option value="iso_88_tkl">88-key ISO TKL</option>
+          <option value="iso_85_75">85-key ISO 75%</option>
+          <option value="iso_69_65">69-key ISO 65%</option>
+          <option value="iso_62_60">62-key ISO 60%</option>
+        </optgroup>
+        <optgroup label="ANSI Layouts">
+          <option value="ansi_108">108-key ANSI (Full)</option>
+          <option value="ansi_104">104-key ANSI</option>
+          <option value="ansi_100_1800">100-key ANSI 1800</option>
+          <option value="ansi_87_tkl">87-key ANSI TKL</option>
+          <option value="ansi_84_75">84-key ANSI 75%</option>
+          <option value="ansi_68_65">68-key ANSI 65%</option>
+          <option value="ansi_61_60">61-key ANSI 60%</option>
+        </optgroup>
+      </select>
 
-    <label for="typeSelect">Key Type:</label>
-    <select id="typeSelect">
-      <option value="108">108 Keys</option>
-      <option value="87">TKL (87)</option>
-      <option value="65">65%</option>
-    </select>
+      <!-- Color Group Picker -->
+      <label class="block mb-2 text-sm">Select Group Color:</label>
+      <input type="color" id="groupColor" class="w-full mb-4">
+      <button onclick="applyGroupColor()" class="w-full bg-blue-600 rounded py-2">Apply to Group</button>
+
+      <!-- Upload Image -->
+      <div class="mt-4">
+        <label class="block mb-2 text-sm">Upload Image:</label>
+        <input type="file" accept="image/*" id="uploadImage" class="mb-2">
+        <button onclick="applyImage()" class="w-full bg-green-600 rounded py-2">Apply Image</button>
+      </div>
+
+      <!-- Text Input -->
+      <div class="mt-4">
+        <label class="block mb-2 text-sm">Add Text:</label>
+        <input type="text" id="customText" class="w-full p-2 mb-2 bg-gray-700 rounded">
+        <button onclick="applyText()" class="w-full bg-yellow-600 rounded py-2">Apply Text</button>
+      </div>
+
+      <!-- Layout Print Position & Color -->
+      <div class="mt-4">
+        <label class="block mb-2 text-sm">Layout Label Position:</label>
+        <select id="layoutPosition" class="w-full mb-2 bg-gray-700 rounded">
+          <option value="top-left">Top Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+          <option value="none">None</option>
+        </select>
+        <input type="color" id="layoutColor" class="w-full mb-2">
+      </div>
+
+      <!-- Download Button -->
+      <button onclick="downloadKeyboard()" class="w-full bg-red-600 mt-6 py-2 rounded">Download Layout</button>
+    </aside>
+
+    <!-- Main Keyboard Area -->
+    <main class="flex-1 p-4 overflow-auto">
+      <div id="keyboardArea" class="flex flex-wrap gap-1 justify-center items-center">
+        <!-- Keys will be dynamically rendered here -->
+      </div>
+    </main>
   </div>
 
-  <!-- Color picker groups -->
-  <div class="color-groups">
-    <label>Alphas:</label>
-    <input type="color" id="alphaColor" value="#ffffff"/>
-    <label>Modifiers:</label>
-    <input type="color" id="modColor" value="#cccccc"/>
-    <button onclick="applyColors()">Apply Colors</button>
-  </div>
-
-  <!-- Upload image -->
-  <div class="controls">
-    <label>Upload Image:</label>
-    <input type="file" id="imageUpload"/>
-  </div>
-
-  <!-- Add overlay text -->
-  <div class="controls">
-    <label>Overlay Text:</label>
-    <input type="text" id="overlayText"/>
-    <select id="textPosition">
-      <option value="top-left">Top Left</option>
-      <option value="center">Center</option>
-      <option value="bottom-right">Bottom Right</option>
-    </select>
-    <input type="color" id="textColor" value="#ffffff"/>
-    <button onclick="addText()">Apply Text</button>
-  </div>
-
-  <!-- Keyboard render area -->
-  <div class="keyboard-container" id="keyboardContainer">
-    <img id="customImage" />
-    <div id="customText"></div>
-    <div class="keyboard" id="keyboard"></div>
-  </div>
-
-  <!-- Download button -->
-  <div class="download-btn">
-    <button onclick="downloadKeyboard()">Download Keyboard</button>
-  </div>
-
-  <!-- html2canvas for screenshot -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
-    // Layout templates
+    // Basic key structure and layout presets (only placeholder shown)
     const layouts = {
-      ansi: {
-        "108": ["ESC", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "DEL", "PRT"],
-        "87": ["ESC", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "BACK"],
-        "65": ["ESC", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "DEL", "ENTER"]
-      },
-      iso: {
-        "108": ["ESC", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "BACK", "ISO"],
-        "87": ["ESC", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "\\"],
-        "65": ["ESC", "TAB", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "ENTER"]
-      }
+      iso_109: ["ESC", "F1", "F2", "F3", "F4" /* Add all 109 keys */],
+      ansi_108: ["ESC", "F1", "F2", "F3", "F4" /* Add all 108 keys */]
+      // TODO: Add full layouts for each type as arrays of key labels
     };
 
-    // Render keys
-    function renderKeyboard() {
-      const layout = document.getElementById('layoutSelect').value;
-      const type = document.getElementById('typeSelect').value;
-      const keys = layouts[layout][type];
-      const keyboard = document.getElementById('keyboard');
-      keyboard.innerHTML = "";
-      keys.forEach((key, index) => {
-        const div = document.createElement("div");
-        div.className = "key";
-        div.textContent = key;
-        // Add class to apply colors
-        if (index < keys.length / 2) {
-          div.classList.add("alpha");
-        } else {
-          div.classList.add("mod");
-        }
-        keyboard.appendChild(div);
+    const keyboardArea = document.getElementById("keyboardArea");
+
+    function renderLayout(layoutKey) {
+      keyboardArea.innerHTML = "";
+      const keys = layouts[layoutKey];
+      keys.forEach((label, index) => {
+        const key = document.createElement("div");
+        key.className = "key w-12 h-12 bg-gray-700 text-center rounded flex justify-center items-center text-sm";
+        key.textContent = label;
+        key.dataset.index = index;
+        key.onclick = () => customizeKey(key);
+        keyboardArea.appendChild(key);
       });
     }
 
-    // Apply group colors
-    function applyColors() {
-      const alphaColor = document.getElementById('alphaColor').value;
-      const modColor = document.getElementById('modColor').value;
-      document.querySelectorAll('.alpha').forEach(el => el.style.backgroundColor = alphaColor);
-      document.querySelectorAll('.mod').forEach(el => el.style.backgroundColor = modColor);
-    }
-
-    // Handle image upload
-    document.getElementById('imageUpload').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = document.getElementById("customImage");
-        img.src = e.target.result;
-      };
-      if (file) reader.readAsDataURL(file);
+    document.getElementById("layoutSelector").addEventListener("change", e => {
+      renderLayout(e.target.value);
     });
 
-    // Add overlay text
-    function addText() {
-      const text = document.getElementById('overlayText').value;
-      const color = document.getElementById('textColor').value;
-      const pos = document.getElementById('textPosition').value;
-      const textDiv = document.getElementById("customText");
-      textDiv.textContent = text;
-      textDiv.style.color = color;
-
-      // Position text
-      if (pos === "top-left") {
-        textDiv.style.top = "10px";
-        textDiv.style.left = "10px";
-      } else if (pos === "center") {
-        textDiv.style.top = "50%";
-        textDiv.style.left = "50%";
-        textDiv.style.transform = "translate(-50%, -50%)";
-      } else if (pos === "bottom-right") {
-        textDiv.style.bottom = "10px";
-        textDiv.style.right = "10px";
-        textDiv.style.top = "";
-        textDiv.style.left = "";
-        textDiv.style.transform = "";
-      }
+    function applyGroupColor() {
+      const color = document.getElementById("groupColor").value;
+      document.querySelectorAll(".key").forEach(k => k.style.backgroundColor = color);
     }
 
-    // Download the keyboard div as PNG
+    function customizeKey(keyEl) {
+      const color = prompt("Pick a color (hex or name):", "#ffffff");
+      if (color) keyEl.style.backgroundColor = color;
+    }
+
+    function applyImage() {
+      const file = document.getElementById("uploadImage").files[0];
+      if (!file) return alert("No image selected.");
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        keyboardArea.style.backgroundImage = `url('${e.target.result}')`;
+        keyboardArea.style.backgroundSize = 'cover';
+      }
+      reader.readAsDataURL(file);
+    }
+
+    function applyText() {
+      const text = document.getElementById("customText").value;
+      document.querySelectorAll(".key").forEach(k => k.textContent = text);
+    }
+
     function downloadKeyboard() {
-      html2canvas(document.getElementById("keyboardContainer")).then(canvas => {
+      html2canvas(document.getElementById("keyboardArea")).then(canvas => {
         const link = document.createElement("a");
-        link.download = "custom-keyboard.png";
+        link.download = 'keyboard-customization.png';
         link.href = canvas.toDataURL();
         link.click();
       });
     }
 
-    // Render once on load
-    renderKeyboard();
-
-    // Re-render when layout changes
-    document.getElementById("layoutSelect").addEventListener("change", renderKeyboard);
-    document.getElementById("typeSelect").addEventListener("change", renderKeyboard);
+    // Initialize default layout
+    renderLayout("iso_109");
   </script>
 </body>
 </html>
