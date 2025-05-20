@@ -818,8 +818,8 @@
                 });
             });
             
-            // Set initial active color group (removed the forced active class from HTML)
-            document.querySelector(`.color-group[data-group="${currentColorGroup}"]`).classList.add('active');
+            // Set initial active color group
+            document.querySelector(`.color-group[data-group="main"]`).classList.add('active');
             
             // Text layout options
             document.querySelectorAll('.layout-option').forEach(option => {
@@ -832,7 +832,13 @@
             
             // Keyboard layout
             document.getElementById('keyboardLayout').addEventListener('change', drawKeyboard);
-            document.getElementById('textColor').addEventListener('input', drawKeyboard);
+            document.getElementById('textColor').addEventListener('input', function() {
+                document.querySelector('.color-value').textContent = 
+                    this.value === '#000000' ? 'Black' : 
+                    this.value === '#ffffff' ? 'White' : 
+                    this.value.toUpperCase();
+                drawKeyboard();
+            });
             
             // Custom image
             document.getElementById('keyboardImage').addEventListener('change', function(e) {
@@ -863,7 +869,13 @@
             
             // Custom text
             document.getElementById('customText').addEventListener('input', drawKeyboard);
-            document.getElementById('customTextColor').addEventListener('input', drawKeyboard);
+            document.getElementById('customTextColor').addEventListener('input', function() {
+                document.querySelectorAll('.color-value')[1].textContent = 
+                    this.value === '#000000' ? 'Black' : 
+                    this.value === '#ffffff' ? 'White' : 
+                    this.value.toUpperCase();
+                drawKeyboard();
+            });
             document.getElementById('customTextPosition').addEventListener('change', drawKeyboard);
             
             // Download button
@@ -990,7 +1002,7 @@
                         x = canvas.width / 2;
                         width = canvas.width / 2;
                     } else if (position === 'spacebar') {
-                        // Find spacebar dimensions (simplified for prototype)
+                        // Find spacebar dimensions
                         const spacebar = layout.keys.find(k => k.type === 'spacebar');
                         if (spacebar) {
                             x = spacebar.x;
@@ -1099,10 +1111,10 @@
                 }
             }
             
-            // Keyboard layout definitions - expanded with more keys
+            // Keyboard layout definitions
             function getLayout(layoutType) {
                 const layouts = {
-                    // ISO 109-key layout (example with more keys)
+                    // ISO 109-key layout
                     'iso-109': {
                         name: "ISO 109-key",
                         keys: [
@@ -1228,7 +1240,7 @@
                             {x: 835, y: 405, width: 155, height: 45, type: 'modifier', label: 'Enter'}
                         ]
                     },
-                    // Other layouts would follow similar pattern
+                    // Other layouts
                     'iso-105': getISO105Layout(),
                     'iso-101': getISO101Layout(),
                     'iso-88': getISO88Layout(),
@@ -1247,7 +1259,7 @@
                 return layouts[layoutType] || layouts['iso-109'];
             }
             
-            // Simplified layout functions for other sizes (would be filled in similarly)
+            // Simplified layout functions for other sizes
             function getISO105Layout() {
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ISO 105-key";
