@@ -1,180 +1,674 @@
-<!-- Keyboard Customizer Full Project (with all layouts and customization features) -->
-<!-- File: index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Keyboard Customizer</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    .key {
-      border: 1px solid #444;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: background-color 0.2s, transform 0.2s;
-    }
-    .key:hover {
-      background-color: #e5e5e5;
-      transform: scale(1.05);
-    }
-    .keyboard {
-      display: grid;
-      gap: 4px;
-    }
-    canvas {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyCraft | Custom Keyboard Builder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #1a1a1a;
+            --text: #333333;
+            --text-light: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text);
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .builder-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .keyboard-display {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .keyboard {
+            width: 100%;
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .keyboard canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .controls {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        .control-section {
+            margin-bottom: 2rem;
+        }
+        
+        .control-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        select, input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .color-picker {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .color-picker input[type="color"] {
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background-color: #c0392b;
+        }
+        
+        .color-groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .color-group {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .color-group:hover {
+            border-color: var(--primary);
+        }
+        
+        .color-group.active {
+            border-color: var(--accent);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .color-group h4 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .layout-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .layout-option {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .layout-option:hover {
+            border-color: var(--primary);
+        }
+        
+        .layout-option.active {
+            border-color: var(--accent);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .builder-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white">
-  <div class="flex flex-col md:flex-row min-h-screen">
-    <!-- Sidebar Panel for Adjustments (Feature: 2, 3, 4, 5) -->
-    <aside class="w-full md:w-64 bg-gray-800 p-4 space-y-4">
-      <h2 class="text-xl font-bold mb-2">Customize</h2>
+<body>
+    <header>
+        <a href="#" class="logo">Key<span>Craft</span></a>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">Deals</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h1>Custom Keyboard Builder</h1>
+        <p>Design your perfect keyboard with our easy-to-use customizer.</p>
+        
+        <div class="builder-container">
+            <div class="keyboard-display">
+                <div class="keyboard">
+                    <canvas id="keyboardCanvas" width="800" height="300"></canvas>
+                </div>
+                <button id="downloadBtn" class="btn btn-accent">Download Design</button>
+            </div>
+            
+            <div class="controls">
+                <div class="control-section">
+                    <h3>Keyboard Layout</h3>
+                    <div class="form-group">
+                        <label for="layoutType">Layout Type</label>
+                        <select id="layoutType">
+                            <option value="iso">ISO (European)</option>
+                            <option value="ansi">ANSI (American)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="keyboardSize">Keyboard Size</label>
+                        <select id="keyboardSize">
+                            <!-- ISO options -->
+                            <option value="iso-109" data-type="iso">109 keys 100% (ISO)</option>
+                            <option value="iso-105" data-type="iso">105 keys 100% (ISO)</option>
+                            <option value="iso-101" data-type="iso">101 keys ISO 1800</option>
+                            <option value="iso-88" data-type="iso">88 keys ISO TKL</option>
+                            <option value="iso-85" data-type="iso">85 keys 75% (ISO)</option>
+                            <option value="iso-69" data-type="iso">69 keys 65% (ISO)</option>
+                            <option value="iso-62" data-type="iso">62 keys 60% (ISO)</option>
+                            <!-- ANSI options -->
+                            <option value="ansi-108" data-type="ansi">108 keys 100% (ANSI)</option>
+                            <option value="ansi-104" data-type="ansi">104 keys 100% (ANSI)</option>
+                            <option value="ansi-100" data-type="ansi">100 keys ANSI 1800</option>
+                            <option value="ansi-87" data-type="ansi">87 keys ANSI TKL</option>
+                            <option value="ansi-84" data-type="ansi">84 keys 75% (ANSI)</option>
+                            <option value="ansi-68" data-type="ansi">68 keys 65% (ANSI)</option>
+                            <option value="ansi-61" data-type="ansi">61 keys 60% (ANSI)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Keycap Colors</h3>
+                    <div class="form-group">
+                        <label>Select color group to edit:</label>
+                        <div class="color-groups">
+                            <div class="color-group active" data-group="main">
+                                <h4>Main Keys</h4>
+                                <input type="color" id="mainColor" value="#cccccc">
+                            </div>
+                            <div class="color-group" data-group="modifiers">
+                                <h4>Modifiers</h4>
+                                <input type="color" id="modifiersColor" value="#999999">
+                            </div>
+                            <div class="color-group" data-group="spacebar">
+                                <h4>Spacebar</h4>
+                                <input type="color" id="spacebarColor" value="#666666">
+                            </div>
+                            <div class="color-group" data-group="accents">
+                                <h4>Accent Keys</h4>
+                                <input type="color" id="accentsColor" value="#e74c3c">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Keyboard Layout Text</h3>
+                    <div class="form-group">
+                        <label for="keyboardLayout">Key Layout</label>
+                        <select id="keyboardLayout">
+                            <option value="qwerty">QWERTY</option>
+                            <option value="azerty">AZERTY</option>
+                            <option value="qwertz">QWERTZ</option>
+                            <option value="dvorak">Dvorak</option>
+                            <option value="colemak">Colemak</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="textPosition">Text Position</label>
+                        <div class="layout-options">
+                            <div class="layout-option active" data-position="top-left">Top Left</div>
+                            <div class="layout-option" data-position="center">Center</div>
+                            <div class="layout-option" data-position="side">Side</div>
+                            <div class="layout-option" data-position="none">None</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="textColor">Text Color</label>
+                        <input type="color" id="textColor" value="#000000">
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Custom Image</h3>
+                    <div class="form-group">
+                        <label for="keyboardImage">Upload Image</label>
+                        <input type="file" id="keyboardImage" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="imageOpacity">Image Opacity</label>
+                        <input type="range" id="imageOpacity" min="0" max="100" value="50">
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Custom Text</h3>
+                    <div class="form-group">
+                        <label for="customText">Text to Add</label>
+                        <input type="text" id="customText" placeholder="Enter custom text">
+                    </div>
+                    <div class="form-group">
+                        <label for="customTextColor">Text Color</label>
+                        <input type="color" id="customTextColor" value="#000000">
+                    </div>
+                    <div class="form-group">
+                        <label for="customTextPosition">Text Position</label>
+                        <select id="customTextPosition">
+                            <option value="spacebar">Spacebar</option>
+                            <option value="top-case">Top Case</option>
+                            <option value="bottom-case">Bottom Case</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2023 KeyCraft. All rights reserved.</p>
+    </footer>
 
-      <!-- Layout Selection (Feature: 1) -->
-      <div>
-        <label for="layout" class="block text-sm font-medium">Keyboard Layout</label>
-        <select id="layout" class="w-full p-2 bg-gray-700 rounded">
-          <optgroup label="ANSI">
-            <option value="ansi108">ANSI - 108 Keys</option>
-            <option value="ansi104">ANSI - 104 Keys</option>
-            <option value="ansi87">ANSI - TKL</option>
-            <option value="ansi84">ANSI - 75%</option>
-            <option value="ansi68">ANSI - 65%</option>
-            <option value="ansi61">ANSI - 60%</option>
-          </optgroup>
-          <optgroup label="ISO">
-            <option value="iso109">ISO - 109 Keys</option>
-            <option value="iso105">ISO - 105 Keys</option>
-            <option value="iso88">ISO - TKL</option>
-            <option value="iso85">ISO - 75%</option>
-            <option value="iso69">ISO - 65%</option>
-            <option value="iso62">ISO - 60%</option>
-          </optgroup>
-        </select>
-      </div>
-
-      <!-- Keycap Color Groups (Feature: 2) -->
-      <div>
-        <label class="block text-sm font-medium">Group Color</label>
-        <input type="color" id="groupColor" class="w-full h-10 mt-1" />
-        <button id="applyGroupColor" class="mt-2 bg-blue-500 px-2 py-1 rounded">Apply to Group</button>
-      </div>
-
-      <!-- Individual Key Customization (Feature: Added by request) -->
-      <div>
-        <label class="block text-sm font-medium">Select Key Color</label>
-        <input type="color" id="keyColor" class="w-full h-10 mt-1" />
-      </div>
-
-      <!-- Image Upload (Feature: 3) -->
-      <div>
-        <label class="block text-sm font-medium">Upload Background</label>
-        <input type="file" id="bgUpload" accept="image/*" class="w-full mt-1" />
-      </div>
-
-      <!-- Text on Keys (Feature: 4) -->
-      <div>
-        <label class="block text-sm font-medium">Text on Key</label>
-        <input type="text" id="keyText" class="w-full mt-1 bg-gray-700 p-1" />
-      </div>
-
-      <!-- Download Layout (Feature: 6) -->
-      <div>
-        <button id="downloadBtn" class="bg-green-500 w-full p-2 rounded mt-2">Download Layout</button>
-      </div>
-    </aside>
-
-    <!-- Main Keyboard Area -->
-    <main class="flex-1 p-4">
-      <div class="relative">
-        <div id="keyboard" class="keyboard grid-cols-15"></div>
-        <canvas id="downloadCanvas" width="1920" height="1080"></canvas>
-      </div>
-    </main>
-  </div>
-
-  <script>
-    // Keyboard Layouts (Feature: 1)
-    const layouts = {
-      ansi108: [
-        ["ESC","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12"],
-        ["~","1","2","3","4","5","6","7","8","9","0","-","=","Backspace"],
-        ["Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\"],
-        ["Caps","A","S","D","F","G","H","J","K","L",";","'","Enter"],
-        ["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],
-        ["Ctrl","Win","Alt","Space","Alt","Fn","Menu","Ctrl"]
-      ],
-      ansi61: [
-        ["ESC","1","2","3","4","5","6","7","8","9","0","-","=","Backspace"],
-        ["Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\"],
-        ["Caps","A","S","D","F","G","H","J","K","L",";","'","Enter"],
-        ["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],
-        ["Ctrl","Win","Alt","Space","Alt","Fn","Menu","Ctrl"]
-      ]
-      // TODO: Add all other ISO/ANSI layouts
-    };
-
-    const keyboardContainer = document.getElementById('keyboard');
-    const layoutSelect = document.getElementById('layout');
-    const keyColorPicker = document.getElementById('keyColor');
-    const keyTextInput = document.getElementById('keyText');
-    let selectedKey = null;
-
-    function renderLayout(layout) {
-      keyboardContainer.innerHTML = '';
-      layout.forEach(row => {
-        row.forEach(label => {
-          const key = document.createElement('div');
-          key.className = 'key bg-white text-black px-2 py-1 rounded';
-          key.textContent = label;
-          key.dataset.label = label;
-          key.style.minWidth = '48px';
-          key.onclick = () => {
-            selectedKey = key;
-            if (keyColorPicker.value) key.style.backgroundColor = keyColorPicker.value;
-            if (keyTextInput.value) key.textContent = keyTextInput.value;
-          }
-          keyboardContainer.appendChild(key);
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('keyboardCanvas');
+            const ctx = canvas.getContext('2d');
+            let currentLayout = 'iso-109';
+            let currentColorGroup = 'main';
+            let uploadedImage = null;
+            
+            // Initialize keyboard
+            drawKeyboard();
+            
+            // Event listeners for layout changes
+            document.getElementById('layoutType').addEventListener('change', function() {
+                const type = this.value;
+                const sizeSelect = document.getElementById('keyboardSize');
+                const options = sizeSelect.options;
+                
+                // Show only options for selected type
+                for (let i = 0; i < options.length; i++) {
+                    const option = options[i];
+                    if (option.dataset.type === type || option.value === currentLayout) {
+                        option.style.display = '';
+                        if (option.value === currentLayout && option.dataset.type === type) {
+                            sizeSelect.selectedIndex = i;
+                        }
+                    } else {
+                        option.style.display = 'none';
+                    }
+                }
+                
+                // Select first visible option if current is hidden
+                if (options[sizeSelect.selectedIndex].style.display === 'none') {
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].style.display !== 'none') {
+                            sizeSelect.selectedIndex = i;
+                            currentLayout = options[i].value;
+                            break;
+                        }
+                    }
+                }
+                
+                drawKeyboard();
+            });
+            
+            document.getElementById('keyboardSize').addEventListener('change', function() {
+                currentLayout = this.value;
+                drawKeyboard();
+            });
+            
+            // Color group selection
+            document.querySelectorAll('.color-group').forEach(group => {
+                group.addEventListener('click', function() {
+                    document.querySelectorAll('.color-group').forEach(g => g.classList.remove('active'));
+                    this.classList.add('active');
+                    currentColorGroup = this.dataset.group;
+                });
+            });
+            
+            // Color pickers
+            document.querySelectorAll('input[type="color"]').forEach(picker => {
+                picker.addEventListener('input', function() {
+                    drawKeyboard();
+                });
+            });
+            
+            // Text layout options
+            document.querySelectorAll('.layout-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.layout-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    drawKeyboard();
+                });
+            });
+            
+            // Keyboard layout
+            document.getElementById('keyboardLayout').addEventListener('change', drawKeyboard);
+            document.getElementById('textColor').addEventListener('input', drawKeyboard);
+            
+            // Custom image
+            document.getElementById('keyboardImage').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = new Image();
+                        img.onload = function() {
+                            uploadedImage = img;
+                            drawKeyboard();
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            document.getElementById('imageOpacity').addEventListener('input', drawKeyboard);
+            
+            // Custom text
+            document.getElementById('customText').addEventListener('input', drawKeyboard);
+            document.getElementById('customTextColor').addEventListener('input', drawKeyboard);
+            document.getElementById('customTextPosition').addEventListener('change', drawKeyboard);
+            
+            // Download button
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const link = document.createElement('a');
+                link.download = 'keyboard-design.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+            
+            // Keyboard drawing function
+            function drawKeyboard() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw keyboard base
+                ctx.fillStyle = '#333333';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw keys based on layout
+                const layout = getLayout(currentLayout);
+                const mainColor = document.getElementById('mainColor').value;
+                const modifiersColor = document.getElementById('modifiersColor').value;
+                const spacebarColor = document.getElementById('spacebarColor').value;
+                const accentsColor = document.getElementById('accentsColor').value;
+                
+                layout.keys.forEach(key => {
+                    // Determine key color
+                    let color = mainColor;
+                    if (key.type === 'modifier') color = modifiersColor;
+                    if (key.type === 'spacebar') color = spacebarColor;
+                    if (key.type === 'accent') color = accentsColor;
+                    
+                    // Draw key
+                    ctx.fillStyle = color;
+                    ctx.fillRect(key.x, key.y, key.width, key.height);
+                    ctx.strokeStyle = '#000000';
+                    ctx.strokeRect(key.x, key.y, key.width, key.height);
+                    
+                    // Draw key label if enabled
+                    const textPosition = document.querySelector('.layout-option.active').dataset.position;
+                    if (textPosition !== 'none' && key.label) {
+                        ctx.fillStyle = document.getElementById('textColor').value;
+                        ctx.font = '12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        
+                        let textX = key.x + key.width / 2;
+                        let textY = key.y + key.height / 2;
+                        
+                        if (textPosition === 'top-left') {
+                            textX = key.x + 5;
+                            textY = key.y + 12;
+                            ctx.textAlign = 'left';
+                        } else if (textPosition === 'side') {
+                            textX = key.x + 5;
+                            textY = key.y + key.height / 2;
+                            ctx.textAlign = 'left';
+                        }
+                        
+                        ctx.fillText(key.label, textX, textY);
+                    }
+                });
+                
+                // Draw custom image if uploaded
+                if (uploadedImage) {
+                    const opacity = document.getElementById('imageOpacity').value / 100;
+                    ctx.globalAlpha = opacity;
+                    ctx.drawImage(uploadedImage, 0, 0, canvas.width, canvas.height);
+                    ctx.globalAlpha = 1.0;
+                }
+                
+                // Draw custom text
+                const customText = document.getElementById('customText').value;
+                if (customText) {
+                    const textColor = document.getElementById('customTextColor').value;
+                    const position = document.getElementById('customTextPosition').value;
+                    
+                    ctx.fillStyle = textColor;
+                    ctx.font = 'bold 16px Arial';
+                    ctx.textAlign = 'center';
+                    
+                    let textY;
+                    if (position === 'spacebar') {
+                        textY = canvas.height - 30;
+                    } else if (position === 'top-case') {
+                        textY = 30;
+                    } else {
+                        textY = canvas.height - 10;
+                    }
+                    
+                    ctx.fillText(customText, canvas.width / 2, textY);
+                }
+            }
+            
+            // Keyboard layout definitions
+            function getLayout(layoutType) {
+                const layouts = {
+                    // ISO layouts
+                    'iso-109': getISO109Layout(),
+                    'iso-105': getISO105Layout(),
+                    'iso-101': getISO101Layout(),
+                    'iso-88': getISO88Layout(),
+                    'iso-85': getISO85Layout(),
+                    'iso-69': getISO69Layout(),
+                    'iso-62': getISO62Layout(),
+                    // ANSI layouts
+                    'ansi-108': getANSI108Layout(),
+                    'ansi-104': getANSI104Layout(),
+                    'ansi-100': getANSI100Layout(),
+                    'ansi-87': getANSI87Layout(),
+                    'ansi-84': getANSI84Layout(),
+                    'ansi-68': getANSI68Layout(),
+                    'ansi-61': getANSI61Layout()
+                };
+                
+                return layouts[layoutType] || layouts['iso-109'];
+            }
+            
+            // Sample layout definitions (simplified for prototype)
+            function getISO109Layout() {
+                return {
+                    name: "ISO 109-key",
+                    keys: [
+                        // First row
+                        {x: 10, y: 10, width: 40, height: 40, type: 'modifier', label: 'Esc'},
+                        {x: 60, y: 10, width: 40, height: 40, label: '1'},
+                        {x: 110, y: 10, width: 40, height: 40, label: '2'},
+                        // ... more keys would be defined here
+                        // Spacebar
+                        {x: 150, y: 200, width: 300, height: 40, type: 'spacebar'}
+                    ]
+                };
+            }
+            
+            function getISO105Layout() {
+                // Similar to 109 but with fewer keys
+                return {
+                    name: "ISO 105-key",
+                    keys: [
+                        // ... key definitions
+                    ]
+                };
+            }
+            
+            // Other layout functions would follow similar pattern
+            // For prototype, we'll just return empty layouts
+            
+            function getISO101Layout() { return {name: "ISO 101-key", keys: []}; }
+            function getISO88Layout() { return {name: "ISO 88-key", keys: []}; }
+            function getISO85Layout() { return {name: "ISO 85-key", keys: []}; }
+            function getISO69Layout() { return {name: "ISO 69-key", keys: []}; }
+            function getISO62Layout() { return {name: "ISO 62-key", keys: []}; }
+            function getANSI108Layout() { return {name: "ANSI 108-key", keys: []}; }
+            function getANSI104Layout() { return {name: "ANSI 104-key", keys: []}; }
+            function getANSI100Layout() { return {name: "ANSI 100-key", keys: []}; }
+            function getANSI87Layout() { return {name: "ANSI 87-key", keys: []}; }
+            function getANSI84Layout() { return {name: "ANSI 84-key", keys: []}; }
+            function getANSI68Layout() { return {name: "ANSI 68-key", keys: []}; }
+            function getANSI61Layout() { return {name: "ANSI 61-key", keys: []}; }
         });
-      });
-    }
-
-    layoutSelect.addEventListener('change', () => {
-      const selected = layoutSelect.value;
-      renderLayout(layouts[selected]);
-    });
-
-    document.getElementById('bgUpload').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        keyboardContainer.style.backgroundImage = `url(${ev.target.result})`;
-        keyboardContainer.style.backgroundSize = 'cover';
-      }
-      reader.readAsDataURL(file);
-    });
-
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-      const canvas = document.getElementById('downloadCanvas');
-      const ctx = canvas.getContext('2d');
-      html2canvas(keyboardContainer).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'keyboard-layout.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    });
-
-    // Init default layout
-    renderLayout(layouts[layoutSelect.value]);
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    </script>
 </body>
 </html>
