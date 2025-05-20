@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keyboard Customizer</title>
+  <style>
+    /* Basic premium feel */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #1c1c1c, #2e2e2e);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .controls, .color-groups, .layout-controls, .download-btn {
+      margin: 10px;
+    }
+
+    .keyboard-container {
+      position: relative;
+      margin: 20px auto;
+      border: 2px solid #555;
+      padding: 20px;
+      background-color: #111;
+      border-radius: 10px;
+    }
+
+    .keyboard {
+      display: grid;
+      grid-template-columns: repeat(15, 40px);
+      grid-gap: 5px;
+      justify-content: center;
+    }
+
+    .key {
+      width: 40px;
+      height: 40px;
+      background-color: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: black;
+      font-weight: bold;
+      border-radius: 4px;
+      user-select: none;
+    }
+
+    /* Overlay image and text for customizations */
+    #customImage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      max-width: 100%;
+      max-height: 100%;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    #customText {
+      position: absolute;
+      font-size: 24px;
+      font-weight: bold;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Keyboard Customizer</h1>
+
+  <!-- Layout and type switcher -->
+  <div class="controls">
+    <label for="layoutSelect">Layout:</label>
+    <select id="layoutSelect">
+      <option value="ansi">ANSI</option>
+      <option value="iso">ISO</option>
+    </select>
+
+    <label for="typeSelect">Key Type:</label>
+    <select id="typeSelect">
+      <option value="108">108 Keys</option>
+      <option value="87">TKL (87)</option>
+      <option value="65">65%</option>
+    </select>
+  </div>
+
+  <!-- Color picker groups -->
+  <div class="color-groups">
+    <label>Alphas:</label>
+    <input type="color" id="alphaColor" value="#ffffff"/>
+    <label>Modifiers:</label>
+    <input type="color" id="modColor" value="#cccccc"/>
+    <button onclick="applyColors()">Apply Colors</button>
+  </div>
+
+  <!-- Upload image -->
+  <div class="controls">
+    <label>Upload Image:</label>
+    <input type="file" id="imageUpload"/>
+  </div>
+
+  <!-- Add overlay text -->
+  <div class="controls">
+    <label>Overlay Text:</label>
+    <input type="text" id="overlayText"/>
+    <select id="textPosition">
+      <option value="top-left">Top Left</option>
+      <option value="center">Center</option>
+      <option value="bottom-right">Bottom Right</option>
+    </select>
+    <input type="color" id="textColor" value="#ffffff"/>
+    <button onclick="addText()">Apply Text</button>
+  </div>
+
+  <!-- Keyboard render area -->
+  <div class="keyboard-container" id="keyboardContainer">
+    <img id="customImage" />
+    <div id="customText"></div>
+    <div class="keyboard" id="keyboard"></div>
+  </div>
+
+  <!-- Download button -->
+  <div class="download-btn">
+    <button onclick="downloadKeyboard()">Download Keyboard</button>
+  </div>
+
+  <!-- html2canvas for screenshot -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    // Layout templates
+    const layouts = {
+      ansi: {
+        "108": ["ESC", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "DEL", "PRT"],
+        "87": ["ESC", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "BACK"],
+        "65": ["ESC", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "DEL", "ENTER"]
+      },
+      iso: {
+        "108": ["ESC", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "BACK", "ISO"],
+        "87": ["ESC", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "\\"],
+        "65": ["ESC", "TAB", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "ENTER"]
+      }
+    };
+
+    // Render keys
+    function renderKeyboard() {
+      const layout = document.getElementById('layoutSelect').value;
+      const type = document.getElementById('typeSelect').value;
+      const keys = layouts[layout][type];
+      const keyboard = document.getElementById('keyboard');
+      keyboard.innerHTML = "";
+      keys.forEach((key, index) => {
+        const div = document.createElement("div");
+        div.className = "key";
+        div.textContent = key;
+        // Add class to apply colors
+        if (index < keys.length / 2) {
+          div.classList.add("alpha");
+        } else {
+          div.classList.add("mod");
+        }
+        keyboard.appendChild(div);
+      });
+    }
+
+    // Apply group colors
+    function applyColors() {
+      const alphaColor = document.getElementById('alphaColor').value;
+      const modColor = document.getElementById('modColor').value;
+      document.querySelectorAll('.alpha').forEach(el => el.style.backgroundColor = alphaColor);
+      document.querySelectorAll('.mod').forEach(el => el.style.backgroundColor = modColor);
+    }
+
+    // Handle image upload
+    document.getElementById('imageUpload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById("customImage");
+        img.src = e.target.result;
+      };
+      if (file) reader.readAsDataURL(file);
+    });
+
+    // Add overlay text
+    function addText() {
+      const text = document.getElementById('overlayText').value;
+      const color = document.getElementById('textColor').value;
+      const pos = document.getElementById('textPosition').value;
+      const textDiv = document.getElementById("customText");
+      textDiv.textContent = text;
+      textDiv.style.color = color;
+
+      // Position text
+      if (pos === "top-left") {
+        textDiv.style.top = "10px";
+        textDiv.style.left = "10px";
+      } else if (pos === "center") {
+        textDiv.style.top = "50%";
+        textDiv.style.left = "50%";
+        textDiv.style.transform = "translate(-50%, -50%)";
+      } else if (pos === "bottom-right") {
+        textDiv.style.bottom = "10px";
+        textDiv.style.right = "10px";
+        textDiv.style.top = "";
+        textDiv.style.left = "";
+        textDiv.style.transform = "";
+      }
+    }
+
+    // Download the keyboard div as PNG
+    function downloadKeyboard() {
+      html2canvas(document.getElementById("keyboardContainer")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "custom-keyboard.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    // Render once on load
+    renderKeyboard();
+
+    // Re-render when layout changes
+    document.getElementById("layoutSelect").addEventListener("change", renderKeyboard);
+    document.getElementById("typeSelect").addEventListener("change", renderKeyboard);
+  </script>
+</body>
+</html>
