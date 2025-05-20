@@ -261,6 +261,12 @@
             border-radius: 3px;
         }
         
+        .color-value {
+            min-width: 70px;
+            font-size: 0.85rem;
+            color: var(--lightest-gray);
+        }
+        
         .btn {
             background-color: var(--medium-gray);
             color: var(--white);
@@ -550,44 +556,44 @@
                     <div class="form-group">
                         <label>Select color group to edit:</label>
                         <div class="color-groups">
-                            <div class="color-group active" data-group="main">
+                            <div class="color-group" data-group="main">
                                 <h4>Main Keys</h4>
                                 <div class="color-picker-container">
-                                    <label>Color:</label>
                                     <div class="color-picker">
                                         <div class="color-preview" style="background-color: #cccccc;" id="mainColorPreview"></div>
                                         <input type="color" id="mainColor" value="#cccccc">
                                     </div>
+                                    <span class="color-value" id="mainColorValue">#CCCCCC</span>
                                 </div>
                             </div>
                             <div class="color-group" data-group="modifiers">
                                 <h4>Modifiers</h4>
                                 <div class="color-picker-container">
-                                    <label>Color:</label>
                                     <div class="color-picker">
                                         <div class="color-preview" style="background-color: #999999;" id="modifiersColorPreview"></div>
                                         <input type="color" id="modifiersColor" value="#999999">
                                     </div>
+                                    <span class="color-value" id="modifiersColorValue">#999999</span>
                                 </div>
                             </div>
                             <div class="color-group" data-group="spacebar">
                                 <h4>Spacebar</h4>
                                 <div class="color-picker-container">
-                                    <label>Color:</label>
                                     <div class="color-picker">
                                         <div class="color-preview" style="background-color: #666666;" id="spacebarColorPreview"></div>
                                         <input type="color" id="spacebarColor" value="#666666">
                                     </div>
+                                    <span class="color-value" id="spacebarColorValue">#666666</span>
                                 </div>
                             </div>
                             <div class="color-group" data-group="accents">
                                 <h4>Accent Keys</h4>
                                 <div class="color-picker-container">
-                                    <label>Color:</label>
                                     <div class="color-picker">
                                         <div class="color-preview" style="background-color: #e74c3c;" id="accentsColorPreview"></div>
                                         <input type="color" id="accentsColor" value="#e74c3c">
                                     </div>
+                                    <span class="color-value" id="accentsColorValue">#E74C3C</span>
                                 </div>
                             </div>
                         </div>
@@ -609,8 +615,8 @@
                     <div class="form-group">
                         <label for="textPosition">Legend Position</label>
                         <div class="layout-options">
-                            <div class="layout-option active" data-position="top-left">Top Left</div>
-                            <div class="layout-option" data-position="center">Center</div>
+                            <div class="layout-option" data-position="top-left">Top Left</div>
+                            <div class="layout-option active" data-position="center">Center</div>
                             <div class="layout-option" data-position="side">Side</div>
                             <div class="layout-option" data-position="none">None</div>
                         </div>
@@ -619,7 +625,7 @@
                         <label for="textColor">Legend Color</label>
                         <div class="color-picker-container">
                             <input type="color" id="textColor" value="#000000">
-                            <label>Black</label>
+                            <span class="color-value">Black</span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -688,7 +694,7 @@
                         <label for="customTextColor">Text Color</label>
                         <div class="color-picker-container">
                             <input type="color" id="customTextColor" value="#ffffff">
-                            <label>White</label>
+                            <span class="color-value">White</span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -789,63 +795,19 @@
             });
             
             // Update color previews when color changes
-            document.getElementById('mainColor').addEventListener('input', function() {
-                document.getElementById('mainColorPreview').style.backgroundColor = this.value;
-                drawKeyboard();
-            });
+            function updateColorPreview(colorInputId, previewId, valueId) {
+                const colorInput = document.getElementById(colorInputId);
+                colorInput.addEventListener('input', function() {
+                    document.getElementById(previewId).style.backgroundColor = this.value;
+                    document.getElementById(valueId).textContent = this.value.toUpperCase();
+                    drawKeyboard();
+                });
+            }
             
-            document.getElementById('modifiersColor').addEventListener('input', function() {
-                document.getElementById('modifiersColorPreview').style.backgroundColor = this.value;
-                drawKeyboard();
-            });
-            
-            document.getElementById('spacebarColor').addEventListener('input', function() {
-                document.getElementById('spacebarColorPreview').style.backgroundColor = this.value;
-                drawKeyboard();
-            });
-            
-            document.getElementById('accentsColor').addEventListener('input', function() {
-                document.getElementById('accentsColorPreview').style.backgroundColor = this.value;
-                drawKeyboard();
-            });
-            
-            // Event listeners for layout changes
-            document.getElementById('layoutType').addEventListener('change', function() {
-                const type = this.value;
-                const sizeSelect = document.getElementById('keyboardSize');
-                const options = sizeSelect.options;
-                
-                // Show only options for selected type
-                for (let i = 0; i < options.length; i++) {
-                    const option = options[i];
-                    if (option.dataset.type === type || option.value === currentLayout) {
-                        option.style.display = '';
-                        if (option.value === currentLayout && option.dataset.type === type) {
-                            sizeSelect.selectedIndex = i;
-                        }
-                    } else {
-                        option.style.display = 'none';
-                    }
-                }
-                
-                // Select first visible option if current is hidden
-                if (options[sizeSelect.selectedIndex].style.display === 'none') {
-                    for (let i = 0; i < options.length; i++) {
-                        if (options[i].style.display !== 'none') {
-                            sizeSelect.selectedIndex = i;
-                            currentLayout = options[i].value;
-                            break;
-                        }
-                    }
-                }
-                
-                drawKeyboard();
-            });
-            
-            document.getElementById('keyboardSize').addEventListener('change', function() {
-                currentLayout = this.value;
-                drawKeyboard();
-            });
+            updateColorPreview('mainColor', 'mainColorPreview', 'mainColorValue');
+            updateColorPreview('modifiersColor', 'modifiersColorPreview', 'modifiersColorValue');
+            updateColorPreview('spacebarColor', 'spacebarColorPreview', 'spacebarColorValue');
+            updateColorPreview('accentsColor', 'accentsColorPreview', 'accentsColorValue');
             
             // Color group selection
             document.querySelectorAll('.color-group').forEach(group => {
@@ -856,12 +818,8 @@
                 });
             });
             
-            // Color pickers
-            document.querySelectorAll('input[type="color"]').forEach(picker => {
-                picker.addEventListener('input', function() {
-                    drawKeyboard();
-                });
-            });
+            // Set initial active color group (removed the forced active class from HTML)
+            document.querySelector(`.color-group[data-group="${currentColorGroup}"]`).classList.add('active');
             
             // Text layout options
             document.querySelectorAll('.layout-option').forEach(option => {
@@ -914,6 +872,44 @@
                 link.download = 'keyboard-design.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
+            });
+            
+            // Event listeners for layout changes
+            document.getElementById('layoutType').addEventListener('change', function() {
+                const type = this.value;
+                const sizeSelect = document.getElementById('keyboardSize');
+                const options = sizeSelect.options;
+                
+                // Show only options for selected type
+                for (let i = 0; i < options.length; i++) {
+                    const option = options[i];
+                    if (option.dataset.type === type || option.value === currentLayout) {
+                        option.style.display = '';
+                        if (option.value === currentLayout && option.dataset.type === type) {
+                            sizeSelect.selectedIndex = i;
+                        }
+                    } else {
+                        option.style.display = 'none';
+                    }
+                }
+                
+                // Select first visible option if current is hidden
+                if (options[sizeSelect.selectedIndex].style.display === 'none') {
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].style.display !== 'none') {
+                            sizeSelect.selectedIndex = i;
+                            currentLayout = options[i].value;
+                            break;
+                        }
+                    }
+                }
+                
+                drawKeyboard();
+            });
+            
+            document.getElementById('keyboardSize').addEventListener('change', function() {
+                currentLayout = this.value;
+                drawKeyboard();
             });
             
             // Keyboard drawing function
@@ -1273,48 +1269,126 @@
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ISO 88-key TKL";
                 // Remove numpad for TKL
+                layout.keys = layout.keys.filter(key => 
+                    ![
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
                 return layout;
             }
             
             function getISO85Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ISO 85-key 75%";
-                // Compact layout for 75%
+                // Remove function row and numpad for 75%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Keep only keys below function row
+                    ![
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
                 return layout;
             }
             
             function getISO69Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ISO 69-key 65%";
-                // Compact layout for 65%
+                // Remove function row, numpad, and some other keys for 65%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Below function row
+                    key.y < 240 && // Above arrow keys
+                    ![
+                        'PrtSc', 'ScrLk', 'Pause',
+                        'Ins', 'Home', 'PgUp',
+                        'Del', 'End', 'PgDn',
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
                 return layout;
             }
             
             function getISO62Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ISO 62-key 60%";
-                // Compact layout for 60%
+                // Remove function row, numpad, arrow keys, etc. for 60%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Below function row
+                    key.y < 240 && // Above arrow keys
+                    ![
+                        'PrtSc', 'ScrLk', 'Pause',
+                        'Ins', 'Home', 'PgUp',
+                        'Del', 'End', 'PgDn',
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter',
+                        '↑', '↓', '←', '→'
+                    ].includes(key.label)
+                );
                 return layout;
             }
             
             function getANSI108Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ANSI 108-key";
-                // Modify for ANSI layout
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
                 return layout;
             }
             
             function getANSI104Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ANSI 104-key";
-                // Modify for ANSI layout
+                // Remove some keys and modify for ANSI
+                layout.keys = layout.keys.filter(key => 
+                    !['PrtSc', 'ScrLk', 'Pause'].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
                 return layout;
             }
             
             function getANSI100Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ANSI 100-key 1800";
-                // Modify for ANSI 1800 compact
+                // Compact layout for 1800
                 return layout;
             }
             
@@ -1322,27 +1396,131 @@
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ANSI 87-key TKL";
                 // Remove numpad for TKL
+                layout.keys = layout.keys.filter(key => 
+                    ![
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
                 return layout;
             }
             
             function getANSI84Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ANSI 84-key 75%";
-                // Compact layout for 75%
+                // Remove function row and numpad for 75%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Keep only keys below function row
+                    ![
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
                 return layout;
             }
             
             function getANSI68Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ANSI 68-key 65%";
-                // Compact layout for 65%
+                // Remove function row, numpad, and some other keys for 65%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Below function row
+                    key.y < 240 && // Above arrow keys
+                    ![
+                        'PrtSc', 'ScrLk', 'Pause',
+                        'Ins', 'Home', 'PgUp',
+                        'Del', 'End', 'PgDn',
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
                 return layout;
             }
             
             function getANSI61Layout() { 
                 const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
                 layout.name = "ANSI 61-key 60%";
-                // Compact layout for 60%
+                // Remove function row, numpad, arrow keys, etc. for 60%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Below function row
+                    key.y < 240 && // Above arrow keys
+                    ![
+                        'PrtSc', 'ScrLk', 'Pause',
+                        'Ins', 'Home', 'PgUp',
+                        'Del', 'End', 'PgDn',
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter',
+                        '↑', '↓', '←', '→'
+                    ].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
                 return layout;
             }
         });
