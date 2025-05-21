@@ -6,7 +6,7 @@
     <title>Keyboard Brothers | Premium Custom Keyboard Builder</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<style>
+    <style>
         :root {
             --black: #121212;
             --dark-gray: #1e1e1e;
@@ -495,7 +495,7 @@
     </style>
 </head>
 <body>
-        <header>
+    <header>
         <a href="#" class="logo">
             <div class="logo-icon">
                 <i class="fas fa-keyboard"></i>
@@ -756,6 +756,7 @@
             </div>
         </div>
     </footer>
+
     <script>
         /**
          * KEYBOARD CUSTOMIZER CORE FUNCTIONALITY
@@ -1106,167 +1107,549 @@
                 alert(message);
             }
 
-            // Event handlers (abbreviated for brevity)
-            function handleLayoutTypeChange() { /* ... */ }
-            function handleSizeChange() { /* ... */ }
-            function handleColorGroupClick() { /* ... */ }
-            function handleColorChange() { /* ... */ }
-            function handleLegendPositionChange() { /* ... */ }
-            function handleTextColorChange() { /* ... */ }
-            function handleImageUpload() { /* ... */ }
-            function handleRemoveImage() { /* ... */ }
-            function handleCustomTextColorChange() { /* ... */ }
-            function handleDownload() { /* ... */ }
-            function handleSliderChange() { /* ... */ }
+            // Event handlers
+            function handleLayoutTypeChange(e) {
+                const type = e.target.value;
+                const sizeSelect = document.getElementById('keyboardSize');
+                const options = sizeSelect.options;
+                
+                // Show only options for selected type
+                for (let i = 0; i < options.length; i++) {
+                    const option = options[i];
+                    if (option.dataset.type === type || option.value === currentLayout) {
+                        option.style.display = '';
+                        if (option.value === currentLayout && option.dataset.type === type) {
+                            sizeSelect.selectedIndex = i;
+                        }
+                    } else {
+                        option.style.display = 'none';
+                    }
+                }
+                
+                // Select first visible option if current is hidden
+                if (options[sizeSelect.selectedIndex].style.display === 'none') {
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].style.display !== 'none') {
+                            sizeSelect.selectedIndex = i;
+                            currentLayout = options[i].value;
+                            break;
+                        }
+                    }
+                }
+                
+                drawKeyboard();
+            }
+            
+            function handleSizeChange(e) {
+                currentLayout = e.target.value;
+                drawKeyboard();
+            }
+            
+            function handleColorGroupClick(e) {
+                document.querySelectorAll('.color-group').forEach(g => g.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                currentColorGroup = e.currentTarget.dataset.group;
+            }
+            
+            function handleColorChange(e) {
+                const colorInput = e.target;
+                const previewId = colorInput.id + 'Preview';
+                const valueId = colorInput.id + 'Value';
+                
+                if (document.getElementById(previewId)) {
+                    document.getElementById(previewId).style.backgroundColor = colorInput.value;
+                }
+                if (document.getElementById(valueId)) {
+                    document.getElementById(valueId).textContent = colorInput.value.toUpperCase();
+                }
+                drawKeyboard();
+            }
+            
+            function handleLegendPositionChange(e) {
+                document.querySelectorAll('.layout-option').forEach(opt => opt.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                drawKeyboard();
+            }
+            
+            function handleTextColorChange(e) {
+                const colorValue = e.target.value === '#000000' ? 'Black' : 
+                                  e.target.value === '#ffffff' ? 'White' : 
+                                  e.target.value.toUpperCase();
+                document.querySelector('.color-value').textContent = colorValue;
+                drawKeyboard();
+            }
+            
+            function handleImageUpload(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = new Image();
+                        img.onload = function() {
+                            uploadedImage = img;
+                            drawKeyboard();
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+            
+            function handleRemoveImage() {
+                uploadedImage = null;
+                document.getElementById('keyboardImage').value = '';
+                drawKeyboard();
+            }
+            
+            function handleCustomTextColorChange(e) {
+                const colorValue = e.target.value === '#000000' ? 'Black' : 
+                                  e.target.value === '#ffffff' ? 'White' : 
+                                  e.target.value.toUpperCase();
+                document.querySelectorAll('.color-value')[1].textContent = colorValue;
+                drawKeyboard();
+            }
+            
+            function handleDownload() {
+                const link = document.createElement('a');
+                link.download = 'keyboard-design.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }
+            
+            function handleSliderChange(e) {
+                const sliderId = e.target.id;
+                const valueElement = document.getElementById(sliderId + 'Value');
+                
+                if (valueElement) {
+                    if (sliderId === 'textSize' || sliderId === 'customTextSize') {
+                        valueElement.textContent = e.target.value + 'px';
+                    } else {
+                        valueElement.textContent = e.target.value + '%';
+                    }
+                }
+                drawKeyboard();
+            }
 
-            // Layout definitions (abbreviated - full definitions would go here)
+            // Layout definitions
             const layouts = {
-                    // ISO 109-key layout
-                    'iso-109': {
-                        name: "ISO 109-key",
-                        keys: [
-                            // Function row
-                            {x: 20, y: 20, width: 45, height: 45, type: 'modifier', label: 'Esc'},
-                            {x: 75, y: 20, width: 45, height: 45, label: 'F1'},
-                            {x: 130, y: 20, width: 45, height: 45, label: 'F2'},
-                            {x: 185, y: 20, width: 45, height: 45, label: 'F3'},
-                            {x: 240, y: 20, width: 45, height: 45, label: 'F4'},
-                            {x: 305, y: 20, width: 45, height: 45, label: 'F5'},
-                            {x: 360, y: 20, width: 45, height: 45, label: 'F6'},
-                            {x: 415, y: 20, width: 45, height: 45, label: 'F7'},
-                            {x: 470, y: 20, width: 45, height: 45, label: 'F8'},
-                            {x: 535, y: 20, width: 45, height: 45, label: 'F9'},
-                            {x: 590, y: 20, width: 45, height: 45, label: 'F10'},
-                            {x: 645, y: 20, width: 45, height: 45, label: 'F11'},
-                            {x: 700, y: 20, width: 45, height: 45, label: 'F12'},
-                            {x: 765, y: 20, width: 45, height: 45, type: 'modifier', label: 'PrtSc'},
-                            {x: 820, y: 20, width: 45, height: 45, type: 'modifier', label: 'ScrLk'},
-                            {x: 875, y: 20, width: 45, height: 45, type: 'modifier', label: 'Pause'},
-                            
-                            // First row
-                            {x: 20, y: 75, width: 45, height: 45, label: '`'},
-                            {x: 75, y: 75, width: 45, height: 45, label: '1'},
-                            {x: 130, y: 75, width: 45, height: 45, label: '2'},
-                            {x: 185, y: 75, width: 45, height: 45, label: '3'},
-                            {x: 240, y: 75, width: 45, height: 45, label: '4'},
-                            {x: 295, y: 75, width: 45, height: 45, label: '5'},
-                            {x: 350, y: 75, width: 45, height: 45, label: '6'},
-                            {x: 405, y: 75, width: 45, height: 45, label: '7'},
-                            {x: 460, y: 75, width: 45, height: 45, label: '8'},
-                            {x: 515, y: 75, width: 45, height: 45, label: '9'},
-                            {x: 570, y: 75, width: 45, height: 45, label: '0'},
-                            {x: 625, y: 75, width: 45, height: 45, label: '-'},
-                            {x: 680, y: 75, width: 45, height: 45, label: '='},
-                            {x: 735, y: 75, width: 90, height: 45, type: 'modifier', label: 'Backspace'},
-                            {x: 835, y: 75, width: 45, height: 45, type: 'modifier', label: 'Ins'},
-                            {x: 890, y: 75, width: 45, height: 45, type: 'modifier', label: 'Home'},
-                            {x: 945, y: 75, width: 45, height: 45, type: 'modifier', label: 'PgUp'},
-                            
-                            // Second row
-                            {x: 20, y: 130, width: 67, height: 45, type: 'modifier', label: 'Tab'},
-                            {x: 97, y: 130, width: 45, height: 45, label: 'Q'},
-                            {x: 152, y: 130, width: 45, height: 45, label: 'W'},
-                            {x: 207, y: 130, width: 45, height: 45, label: 'E'},
-                            {x: 262, y: 130, width: 45, height: 45, label: 'R'},
-                            {x: 317, y: 130, width: 45, height: 45, label: 'T'},
-                            {x: 372, y: 130, width: 45, height: 45, label: 'Y'},
-                            {x: 427, y: 130, width: 45, height: 45, label: 'U'},
-                            {x: 482, y: 130, width: 45, height: 45, label: 'I'},
-                            {x: 537, y: 130, width: 45, height: 45, label: 'O'},
-                            {x: 592, y: 130, width: 45, height: 45, label: 'P'},
-                            {x: 647, y: 130, width: 45, height: 45, label: '['},
-                            {x: 702, y: 130, width: 45, height: 45, label: ']'},
-                            {x: 757, y: 130, width: 68, height: 45, type: 'modifier', label: '\\'},
-                            {x: 835, y: 130, width: 45, height: 45, type: 'modifier', label: 'Del'},
-                            {x: 890, y: 130, width: 45, height: 45, type: 'modifier', label: 'End'},
-                            {x: 945, y: 130, width: 45, height: 45, type: 'modifier', label: 'PgDn'},
-                            
-                            // Third row
-                            {x: 20, y: 185, width: 80, height: 45, type: 'modifier', label: 'Caps'},
-                            {x: 110, y: 185, width: 45, height: 45, label: 'A'},
-                            {x: 165, y: 185, width: 45, height: 45, label: 'S'},
-                            {x: 220, y: 185, width: 45, height: 45, label: 'D'},
-                            {x: 275, y: 185, width: 45, height: 45, label: 'F'},
-                            {x: 330, y: 185, width: 45, height: 45, label: 'G'},
-                            {x: 385, y: 185, width: 45, height: 45, label: 'H'},
-                            {x: 440, y: 185, width: 45, height: 45, label: 'J'},
-                            {x: 495, y: 185, width: 45, height: 45, label: 'K'},
-                            {x: 550, y: 185, width: 45, height: 45, label: 'L'},
-                            {x: 605, y: 185, width: 45, height: 45, label: ';'},
-                            {x: 660, y: 185, width: 45, height: 45, label: "'"},
-                            {x: 715, y: 185, width: 110, height: 45, type: 'modifier', label: 'Enter'},
-                            
-                            // Fourth row
-                            {x: 20, y: 240, width: 95, height: 45, type: 'modifier', label: 'Shift'},
-                            {x: 125, y: 240, width: 45, height: 45, label: 'Z'},
-                            {x: 180, y: 240, width: 45, height: 45, label: 'X'},
-                            {x: 235, y: 240, width: 45, height: 45, label: 'C'},
-                            {x: 290, y: 240, width: 45, height: 45, label: 'V'},
-                            {x: 345, y: 240, width: 45, height: 45, label: 'B'},
-                            {x: 400, y: 240, width: 45, height: 45, label: 'N'},
-                            {x: 455, y: 240, width: 45, height: 45, label: 'M'},
-                            {x: 510, y: 240, width: 45, height: 45, label: ','},
-                            {x: 565, y: 240, width: 45, height: 45, label: '.'},
-                            {x: 620, y: 240, width: 45, height: 45, label: '/'},
-                            {x: 675, y: 240, width: 150, height: 45, type: 'modifier', label: 'Shift'},
-                            
-                            // Fifth row
-                            {x: 20, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
-                            {x: 95, y: 295, width: 65, height: 45, type: 'modifier', label: 'Win'},
-                            {x: 170, y: 295, width: 65, height: 45, type: 'modifier', label: 'Alt'},
-                            {x: 245, y: 295, width: 280, height: 45, type: 'spacebar', label: ''},
-                            {x: 535, y: 295, width: 65, height: 45, type: 'modifier', label: 'Alt'},
-                            {x: 610, y: 295, width: 65, height: 45, type: 'modifier', label: 'Win'},
-                            {x: 685, y: 295, width: 65, height: 45, type: 'modifier', label: 'Menu'},
-                            {x: 760, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
-                            
-                            // Arrow keys
-                            {x: 835, y: 240, width: 45, height: 45, type: 'modifier', label: '↑'},
-                            {x: 835, y: 295, width: 45, height: 45, type: 'modifier', label: '↓'},
-                            {x: 780, y: 295, width: 45, height: 45, type: 'modifier', label: '←'},
-                            {x: 890, y: 295, width: 45, height: 45, type: 'modifier', label: '→'},
-                            
-                            // Numpad
-                            {x: 945, y: 185, width: 45, height: 45, type: 'modifier', label: 'Num'},
-                            {x: 945, y: 240, width: 45, height: 45, label: '/'},
-                            {x: 945, y: 295, width: 45, height: 45, label: '*'},
-                            {x: 945, y: 350, width: 45, height: 45, label: '-'},
-                            
-                            {x: 835, y: 185, width: 45, height: 45, label: '7'},
-                            {x: 890, y: 185, width: 45, height: 45, label: '8'},
-                            {x: 945, y: 185, width: 45, height: 45, label: '9'},
-                            {x: 835, y: 240, width: 45, height: 45, label: '4'},
-                            {x: 890, y: 240, width: 45, height: 45, label: '5'},
-                            {x: 945, y: 240, width: 45, height: 45, label: '6'},
-                            {x: 835, y: 295, width: 45, height: 45, label: '1'},
-                            {x: 890, y: 295, width: 45, height: 45, label: '2'},
-                            {x: 945, y: 295, width: 45, height: 45, label: '3'},
-                            {x: 835, y: 350, width: 90, height: 45, label: '0'},
-                            {x: 945, y: 350, width: 45, height: 45, label: '.'},
-                            {x: 945, y: 405, width: 45, height: 45, label: '+'},
-                            {x: 835, y: 405, width: 155, height: 45, type: 'modifier', label: 'Enter'}
-                        ]
-                    },
-                    // Other layouts
-                    'iso-105': getISO105Layout(),
-                    'iso-101': getISO101Layout(),
-                    'iso-88': getISO88Layout(),
-                    'iso-85': getISO85Layout(),
-                    'iso-69': getISO69Layout(),
-                    'iso-62': getISO62Layout(),
-                    'ansi-108': getANSI108Layout(),
-                    'ansi-104': getANSI104Layout(),
-                    'ansi-100': getANSI100Layout(),
-                    'ansi-87': getANSI87Layout(),
-                    'ansi-84': getANSI84Layout(),
-                    'ansi-68': getANSI68Layout(),
-                    'ansi-61': getANSI61Layout()
-                };
-
-            // Helper functions for layout generation
-            function createISOLayout() { /* ... */ }
-            function createANSILayout() { /* ... */ }
-            function applyKeyModifications() { /* ... */ }
+                // ISO 109-key layout
+                'iso-109': {
+                    name: "ISO 109-key",
+                    keys: [
+                        // Function row
+                        {x: 20, y: 20, width: 45, height: 45, type: 'modifier', label: 'Esc'},
+                        {x: 75, y: 20, width: 45, height: 45, label: 'F1'},
+                        {x: 130, y: 20, width: 45, height: 45, label: 'F2'},
+                        {x: 185, y: 20, width: 45, height: 45, label: 'F3'},
+                        {x: 240, y: 20, width: 45, height: 45, label: 'F4'},
+                        {x: 305, y: 20, width: 45, height: 45, label: 'F5'},
+                        {x: 360, y: 20, width: 45, height: 45, label: 'F6'},
+                        {x: 415, y: 20, width: 45, height: 45, label: 'F7'},
+                        {x: 470, y: 20, width: 45, height: 45, label: 'F8'},
+                        {x: 535, y: 20, width: 45, height: 45, label: 'F9'},
+                        {x: 590, y: 20, width: 45, height: 45, label: 'F10'},
+                        {x: 645, y: 20, width: 45, height: 45, label: 'F11'},
+                        {x: 700, y: 20, width: 45, height: 45, label: 'F12'},
+                        {x: 765, y: 20, width: 45, height: 45, type: 'modifier', label: 'PrtSc'},
+                        {x: 820, y: 20, width: 45, height: 45, type: 'modifier', label: 'ScrLk'},
+                        {x: 875, y: 20, width: 45, height: 45, type: 'modifier', label: 'Pause'},
+                        
+                        // First row
+                        {x: 20, y: 75, width: 45, height: 45, label: '`'},
+                        {x: 75, y: 75, width: 45, height: 45, label: '1'},
+                        {x: 130, y: 75, width: 45, height: 45, label: '2'},
+                        {x: 185, y: 75, width: 45, height: 45, label: '3'},
+                        {x: 240, y: 75, width: 45, height: 45, label: '4'},
+                        {x: 295, y: 75, width: 45, height: 45, label: '5'},
+                        {x: 350, y: 75, width: 45, height: 45, label: '6'},
+                        {x: 405, y: 75, width: 45, height: 45, label: '7'},
+                        {x: 460, y: 75, width: 45, height: 45, label: '8'},
+                        {x: 515, y: 75, width: 45, height: 45, label: '9'},
+                        {x: 570, y: 75, width: 45, height: 45, label: '0'},
+                        {x: 625, y: 75, width: 45, height: 45, label: '-'},
+                        {x: 680, y: 75, width: 45, height: 45, label: '='},
+                        {x: 735, y: 75, width: 90, height: 45, type: 'modifier', label: 'Backspace'},
+                        {x: 835, y: 75, width: 45, height: 45, type: 'modifier', label: 'Ins'},
+                        {x: 890, y: 75, width: 45, height: 45, type: 'modifier', label: 'Home'},
+                        {x: 945, y: 75, width: 45, height: 45, type: 'modifier', label: 'PgUp'},
+                        
+                        // Second row
+                        {x: 20, y: 130, width: 67, height: 45, type: 'modifier', label: 'Tab'},
+                        {x: 97, y: 130, width: 45, height: 45, label: 'Q'},
+                        {x: 152, y: 130, width: 45, height: 45, label: 'W'},
+                        {x: 207, y: 130, width: 45, height: 45, label: 'E'},
+                        {x: 262, y: 130, width: 45, height: 45, label: 'R'},
+                        {x: 317, y: 130, width: 45, height: 45, label: 'T'},
+                        {x: 372, y: 130, width: 45, height: 45, label: 'Y'},
+                        {x: 427, y: 130, width: 45, height: 45, label: 'U'},
+                        {x: 482, y: 130, width: 45, height: 45, label: 'I'},
+                        {x: 537, y: 130, width: 45, height: 45, label: 'O'},
+                        {x: 592, y: 130, width: 45, height: 45, label: 'P'},
+                        {x: 647, y: 130, width: 45, height: 45, label: '['},
+                        {x: 702, y: 130, width: 45, height: 45, label: ']'},
+                        {x: 757, y: 130, width: 68, height: 45, type: 'modifier', label: '\\'},
+                        {x: 835, y: 130, width: 45, height: 45, type: 'modifier', label: 'Del'},
+                        {x: 890, y: 130, width: 45, height: 45, type: 'modifier', label: 'End'},
+                        {x: 945, y: 130, width: 45, height: 45, type: 'modifier', label: 'PgDn'},
+                        
+                        // Third row
+                        {x: 20, y: 185, width: 80, height: 45, type: 'modifier', label: 'Caps'},
+                        {x: 110, y: 185, width: 45, height: 45, label: 'A'},
+                        {x: 165, y: 185, width: 45, height: 45, label: 'S'},
+                        {x: 220, y: 185, width: 45, height: 45, label: 'D'},
+                        {x: 275, y: 185, width: 45, height: 45, label: 'F'},
+                        {x: 330, y: 185, width: 45, height: 45, label: 'G'},
+                        {x: 385, y: 185, width: 45, height: 45, label: 'H'},
+                        {x: 440, y: 185, width: 45, height: 45, label: 'J'},
+                        {x: 495, y: 185, width: 45, height: 45, label: 'K'},
+                        {x: 550, y: 185, width: 45, height: 45, label: 'L'},
+                        {x: 605, y: 185, width: 45, height: 45, label: ';'},
+                        {x: 660, y: 185, width: 45, height: 45, label: "'"},
+                        {x: 715, y: 185, width: 110, height: 45, type: 'modifier', label: 'Enter'},
+                        
+                        // Fourth row
+                        {x: 20, y: 240, width: 95, height: 45, type: 'modifier', label: 'Shift'},
+                        {x: 125, y: 240, width: 45, height: 45, label: 'Z'},
+                        {x: 180, y: 240, width: 45, height: 45, label: 'X'},
+                        {x: 235, y: 240, width: 45, height: 45, label: 'C'},
+                        {x: 290, y: 240, width: 45, height: 45, label: 'V'},
+                        {x: 345, y: 240, width: 45, height: 45, label: 'B'},
+                        {x: 400, y: 240, width: 45, height: 45, label: 'N'},
+                        {x: 455, y: 240, width: 45, height: 45, label: 'M'},
+                        {x: 510, y: 240, width: 45, height: 45, label: ','},
+                        {x: 565, y: 240, width: 45, height: 45, label: '.'},
+                        {x: 620, y: 240, width: 45, height: 45, label: '/'},
+                        {x: 675, y: 240, width: 150, height: 45, type: 'modifier', label: 'Shift'},
+                        
+                        // Fifth row
+                        {x: 20, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
+                        {x: 95, y: 295, width: 65, height: 45, type: 'modifier', label: 'Win'},
+                        {x: 170, y: 295, width: 65, height: 45, type: 'modifier', label: 'Alt'},
+                        {x: 245, y: 295, width: 280, height: 45, type: 'spacebar', label: ''},
+                        {x: 535, y: 295, width: 65, height: 45, type: 'modifier', label: 'Alt'},
+                        {x: 610, y: 295, width: 65, height: 45, type: 'modifier', label: 'Win'},
+                        {x: 685, y: 295, width: 65, height: 45, type: 'modifier', label: 'Menu'},
+                        {x: 760, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
+                        
+                        // Arrow keys
+                        {x: 835, y: 240, width: 45, height: 45, type: 'modifier', label: '↑'},
+                        {x: 835, y: 295, width: 45, height: 45, type: 'modifier', label: '↓'},
+                        {x: 780, y: 295, width: 45, height: 45, type: 'modifier', label: '←'},
+                        {x: 890, y: 295, width: 45, height: 45, type: 'modifier', label: '→'},
+                        
+                        // Numpad
+                        {x: 945, y: 185, width: 45, height: 45, type: 'modifier', label: 'Num'},
+                        {x: 945, y: 240, width: 45, height: 45, label: '/'},
+                        {x: 945, y: 295, width: 45, height: 45, label: '*'},
+                        {x: 945, y: 350, width: 45, height: 45, label: '-'},
+                        
+                        {x: 835, y: 185, width: 45, height: 45, label: '7'},
+                        {x: 890, y: 185, width: 45, height: 45, label: '8'},
+                        {x: 945, y: 185, width: 45, height: 45, label: '9'},
+                        {x: 835, y: 240, width: 45, height: 45, label: '4'},
+                        {x: 890, y: 240, width: 45, height: 45, label: '5'},
+                        {x: 945, y: 240, width: 45, height: 45, label: '6'},
+                        {x: 835, y: 295, width: 45, height: 45, label: '1'},
+                        {x: 890, y: 295, width: 45, height: 45, label: '2'},
+                        {x: 945, y: 295, width: 45, height: 45, label: '3'},
+                        {x: 835, y: 350, width: 90, height: 45, label: '0'},
+                        {x: 945, y: 350, width: 45, height: 45, label: '.'},
+                        {x: 945, y: 405, width: 45, height: 45, label: '+'},
+                        {x: 835, y: 405, width: 155, height: 45, type: 'modifier', label: 'Enter'}
+                    ]
+                },
+                // Other layouts
+                'iso-105': getISO105Layout(),
+                'iso-101': getISO101Layout(),
+                'iso-88': getISO88Layout(),
+                'iso-85': getISO85Layout(),
+                'iso-69': getISO69Layout(),
+                'iso-62': getISO62Layout(),
+                'ansi-108': getANSI108Layout(),
+                'ansi-104': getANSI104Layout(),
+                'ansi-100': getANSI100Layout(),
+                'ansi-87': getANSI87Layout(),
+                'ansi-84': getANSI84Layout(),
+                'ansi-68': getANSI68Layout(),
+                'ansi-61': getANSI61Layout()
+            };
+            
+            // Simplified layout functions for other sizes
+            function getISO105Layout() {
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ISO 105-key";
+                // Remove some keys to make it 105-key
+                layout.keys = layout.keys.filter(key => 
+                    !['PrtSc', 'ScrLk', 'Pause'].includes(key.label)
+                );
+                return layout;
+            }
+            
+            function getISO101Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ISO 101-key";
+                // Modify layout for 1800 compact
+                return layout;
+            }
+            
+            function getISO88Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ISO 88-key TKL";
+                // Remove numpad for TKL
+                layout.keys = layout.keys.filter(key => 
+                    ![
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                return layout;
+            }
+            
+            function getISO85Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ISO 85-key 75%";
+                // Remove function row and numpad for 75%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Keep only keys below function row
+                    ![
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                return layout;
+            }
+            
+            function getISO69Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ISO 69-key 65%";
+                // Remove function row, numpad, and some other keys for 65%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Below function row
+                    key.y < 240 && // Above arrow keys
+                    ![
+                        'PrtSc', 'ScrLk', 'Pause',
+                        'Ins', 'Home', 'PgUp',
+                        'Del', 'End', 'PgDn',
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                return layout;
+            }
+            
+            function getISO62Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ISO 62-key 60%";
+                // Remove function row, numpad, arrow keys, etc. for 60%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Below function row
+                    key.y < 240 && // Above arrow keys
+                    ![
+                        'PrtSc', 'ScrLk', 'Pause',
+                        'Ins', 'Home', 'PgUp',
+                        'Del', 'End', 'PgDn',
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter',
+                        '↑', '↓', '←', '→'
+                    ].includes(key.label)
+                );
+                return layout;
+            }
+            
+            function getANSI108Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ANSI 108-key";
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
+                return layout;
+            }
+            
+            function getANSI104Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ANSI 104-key";
+                // Remove some keys and modify for ANSI
+                layout.keys = layout.keys.filter(key => 
+                    !['PrtSc', 'ScrLk', 'Pause'].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
+                return layout;
+            }
+            
+            function getANSI100Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ANSI 100-key 1800";
+                // Compact layout for 1800
+                return layout;
+            }
+            
+            function getANSI87Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ANSI 87-key TKL";
+                // Remove numpad for TKL
+                layout.keys = layout.keys.filter(key => 
+                    ![
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
+                return layout;
+            }
+            
+            function getANSI84Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ANSI 84-key 75%";
+                // Remove function row and numpad for 75%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Keep only keys below function row
+                    ![
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
+                return layout;
+            }
+            
+            function getANSI68Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ANSI 68-key 65%";
+                // Remove function row, numpad, and some other keys for 65%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Below function row
+                    key.y < 240 && // Above arrow keys
+                    ![
+                        'PrtSc', 'ScrLk', 'Pause',
+                        'Ins', 'Home', 'PgUp',
+                        'Del', 'End', 'PgDn',
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter'
+                    ].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
+                return layout;
+            }
+            
+            function getANSI61Layout() { 
+                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                layout.name = "ANSI 61-key 60%";
+                // Remove function row, numpad, arrow keys, etc. for 60%
+                layout.keys = layout.keys.filter(key => 
+                    key.y > 20 && // Below function row
+                    key.y < 240 && // Above arrow keys
+                    ![
+                        'PrtSc', 'ScrLk', 'Pause',
+                        'Ins', 'Home', 'PgUp',
+                        'Del', 'End', 'PgDn',
+                        'Num', '/', '*', '-', 
+                        '7', '8', '9', 
+                        '4', '5', '6', 
+                        '1', '2', '3', 
+                        '0', '.', '+', 'Enter',
+                        '↑', '↓', '←', '→'
+                    ].includes(key.label)
+                );
+                // Modify Enter key and left shift for ANSI
+                layout.keys.forEach(key => {
+                    if (key.label === 'Enter') {
+                        key.width = 90;
+                        key.x = 702;
+                    }
+                    if (key.label === 'Shift' && key.x === 20) {
+                        key.width = 80;
+                    }
+                    if (key.label === '\\') {
+                        key.width = 45;
+                        key.x = 702;
+                    }
+                });
+                return layout;
+            }
 
             // Initialize the keyboard
             initKeyboard();
