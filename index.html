@@ -6,15 +6,756 @@
     <title>Keyboard Brothers | Premium Custom Keyboard Builder</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <style>
-        /* CSS styles remain the same as previous version */
-        /* ... (include all the CSS from earlier) ... */
+<style>
+        :root {
+            --black: #121212;
+            --dark-gray: #1e1e1e;
+            --medium-gray: #2d2d2d;
+            --light-gray: #3d3d3d;
+            --lighter-gray: #4d4d4d;
+            --lightest-gray: #5d5d5d;
+            --white: #f0f0f0;
+            --accent: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--white);
+            background-color: var(--black);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--dark-gray);
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--white);
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+        
+        .logo-text span {
+            color: var(--accent);
+            font-style: italic;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 2rem;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        
+        nav ul li::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+        
+        nav ul li:hover::after {
+            width: 100%;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            color: var(--white);
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--lightest-gray);
+            font-weight: 400;
+        }
+        
+        .builder-container {
+            display: flex;
+            gap: 2rem;
+            height: calc(100vh - 200px);
+            min-height: 700px;
+        }
+        
+        .controls {
+            width: 320px;
+            background-color: var(--dark-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--light-gray);
+            overflow-y: auto;
+        }
+        
+        .keyboard-display {
+            flex: 1;
+            background-color: var(--dark-gray);
+            border-radius: 8px;
+            border: 1px solid var(--light-gray);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .keyboard {
+            width: 100%;
+            height: 100%;
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .keyboard canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .control-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .control-section:last-child {
+            border-bottom: none;
+        }
+        
+        .control-section h3 {
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .control-section h3 i {
+            color: var(--accent);
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--lightest-gray);
+        }
+        
+        select, input, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: var(--medium-gray);
+            color: var(--white);
+            transition: all 0.3s;
+        }
+        
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+        
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .color-picker-container label {
+            margin-bottom: 0;
+            flex: 1;
+        }
+        
+        .color-picker {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid var(--light-gray);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .color-picker input[type="color"] {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+            opacity: 0;
+        }
+        
+        .color-preview {
+            width: 100%;
+            height: 100%;
+            border-radius: 3px;
+        }
+        
+        .color-value {
+            min-width: 70px;
+            font-size: 0.85rem;
+            color: var(--lightest-gray);
+        }
+        
+        .btn {
+            background-color: var(--medium-gray);
+            color: var(--white);
+            border: 1px solid var(--light-gray);
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:hover {
+            background-color: var(--light-gray);
+            border-color: var(--lighter-gray);
+        }
+        
+        .btn-accent {
+            background-color: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+        }
+        
+        .btn-accent:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .btn-danger {
+            background-color: #3d2d2d;
+            color: #ff6b6b;
+            border-color: #5d3d3d;
+        }
+        
+        .btn-danger:hover {
+            background-color: #5d3d3d;
+            border-color: #7d5d5d;
+        }
+        
+        .color-groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 1rem;
+        }
+        
+        .color-group {
+            border: 1px solid var(--light-gray);
+            padding: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: var(--medium-gray);
+        }
+        
+        .color-group:hover {
+            border-color: var(--lighter-gray);
+        }
+        
+        .color-group.active {
+            border-color: var(--accent);
+            background-color: var(--light-gray);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+        
+        .color-group h4 {
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--white);
+            font-weight: 500;
+        }
+        
+        .layout-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .layout-option {
+            flex: 1;
+            min-width: 60px;
+            text-align: center;
+            padding: 0.8rem 0.5rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            background-color: var(--medium-gray);
+        }
+        
+        .layout-option:hover {
+            border-color: var(--lighter-gray);
+        }
+        
+        .layout-option.active {
+            border-color: var(--accent);
+            background-color: var(--light-gray);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+        
+        .image-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .image-controls .btn {
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .slider-container input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            background: var(--medium-gray);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--white);
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            width: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--lightest-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            color: var(--lightest-gray);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .builder-container {
+                flex-direction: column;
+                height: auto;
+                min-height: auto;
+            }
+            
+            .controls {
+                width: 100%;
+                order: 2;
+            }
+            
+            .keyboard-display {
+                height: 500px;
+                order: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 0;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- HTML structure remains the same -->
-    <!-- ... (include all the HTML from earlier) ... -->
-
+        <header>
+        <a href="#" class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-keyboard"></i>
+            </div>
+            <div class="logo-text">Keyboard <span>Brothers</span></div>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h1 class="page-title">Custom Keyboard Builder</h1>
+        <p class="page-subtitle">Design your perfect mechanical keyboard with our premium customization tools</p>
+        
+        <div class="builder-container">
+            <div class="controls">
+                <div class="control-section">
+                    <h3><i class="fas fa-keyboard"></i> Keyboard Layout</h3>
+                    <div class="form-group">
+                        <label for="layoutType">Layout Type</label>
+                        <select id="layoutType">
+                            <option value="iso">ISO (European)</option>
+                            <option value="ansi">ANSI (American)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="keyboardSize">Keyboard Size</label>
+                        <select id="keyboardSize">
+                            <!-- ISO options -->
+                            <option value="iso-109" data-type="iso">109 keys 100% (ISO)</option>
+                            <option value="iso-105" data-type="iso">105 keys 100% (ISO)</option>
+                            <option value="iso-101" data-type="iso">101 keys ISO 1800</option>
+                            <option value="iso-88" data-type="iso">88 keys ISO TKL</option>
+                            <option value="iso-85" data-type="iso">85 keys 75% (ISO)</option>
+                            <option value="iso-69" data-type="iso">69 keys 65% (ISO)</option>
+                            <option value="iso-62" data-type="iso">62 keys 60% (ISO)</option>
+                            <!-- ANSI options -->
+                            <option value="ansi-108" data-type="ansi">108 keys 100% (ANSI)</option>
+                            <option value="ansi-104" data-type="ansi">104 keys 100% (ANSI)</option>
+                            <option value="ansi-100" data-type="ansi">100 keys ANSI 1800</option>
+                            <option value="ansi-87" data-type="ansi">87 keys ANSI TKL</option>
+                            <option value="ansi-84" data-type="ansi">84 keys 75% (ANSI)</option>
+                            <option value="ansi-68" data-type="ansi">68 keys 65% (ANSI)</option>
+                            <option value="ansi-61" data-type="ansi">61 keys 60% (ANSI)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3><i class="fas fa-palette"></i> Keycap Colors</h3>
+                    <div class="form-group">
+                        <label>Select color group to edit:</label>
+                        <div class="color-groups">
+                            <div class="color-group" data-group="main">
+                                <h4>Main Keys</h4>
+                                <div class="color-picker-container">
+                                    <div class="color-picker">
+                                        <div class="color-preview" style="background-color: #cccccc;" id="mainColorPreview"></div>
+                                        <input type="color" id="mainColor" value="#cccccc">
+                                    </div>
+                                    <span class="color-value" id="mainColorValue">#CCCCCC</span>
+                                </div>
+                            </div>
+                            <div class="color-group" data-group="modifiers">
+                                <h4>Modifiers</h4>
+                                <div class="color-picker-container">
+                                    <div class="color-picker">
+                                        <div class="color-preview" style="background-color: #999999;" id="modifiersColorPreview"></div>
+                                        <input type="color" id="modifiersColor" value="#999999">
+                                    </div>
+                                    <span class="color-value" id="modifiersColorValue">#999999</span>
+                                </div>
+                            </div>
+                            <div class="color-group" data-group="spacebar">
+                                <h4>Spacebar</h4>
+                                <div class="color-picker-container">
+                                    <div class="color-picker">
+                                        <div class="color-preview" style="background-color: #666666;" id="spacebarColorPreview"></div>
+                                        <input type="color" id="spacebarColor" value="#666666">
+                                    </div>
+                                    <span class="color-value" id="spacebarColorValue">#666666</span>
+                                </div>
+                            </div>
+                            <div class="color-group" data-group="accents">
+                                <h4>Accent Keys</h4>
+                                <div class="color-picker-container">
+                                    <div class="color-picker">
+                                        <div class="color-preview" style="background-color: #e74c3c;" id="accentsColorPreview"></div>
+                                        <input type="color" id="accentsColor" value="#e74c3c">
+                                    </div>
+                                    <span class="color-value" id="accentsColorValue">#E74C3C</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3><i class="fas fa-font"></i> Key Legends</h3>
+                    <div class="form-group">
+                        <label for="keyboardLayout">Key Layout</label>
+                        <select id="keyboardLayout">
+                            <option value="qwerty">QWERTY</option>
+                            <option value="azerty">AZERTY</option>
+                            <option value="qwertz">QWERTZ</option>
+                            <option value="dvorak">Dvorak</option>
+                            <option value="colemak">Colemak</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="textPosition">Legend Position</label>
+                        <div class="layout-options">
+                            <div class="layout-option" data-position="top-left">Top Left</div>
+                            <div class="layout-option active" data-position="center">Center</div>
+                            <div class="layout-option" data-position="side">Side</div>
+                            <div class="layout-option" data-position="none">None</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="textColor">Legend Color</label>
+                        <div class="color-picker-container">
+                            <input type="color" id="textColor" value="#000000">
+                            <span class="color-value">Black</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="textSize">Legend Size</label>
+                        <div class="slider-container">
+                            <input type="range" id="textSize" min="8" max="24" value="12">
+                            <span class="slider-value" id="textSizeValue">12px</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="textOpacity">Legend Opacity</label>
+                        <div class="slider-container">
+                            <input type="range" id="textOpacity" min="0" max="100" value="100">
+                            <span class="slider-value" id="textOpacityValue">100%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3><i class="fas fa-image"></i> Custom Image</h3>
+                    <div class="form-group">
+                        <label for="keyboardImage">Upload Image</label>
+                        <input type="file" id="keyboardImage" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="imagePosition">Image Position</label>
+                        <select id="imagePosition">
+                            <option value="full">Full Keyboard</option>
+                            <option value="top-half">Top Half</option>
+                            <option value="bottom-half">Bottom Half</option>
+                            <option value="left-side">Left Side</option>
+                            <option value="right-side">Right Side</option>
+                            <option value="spacebar">Spacebar Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageSize">Image Size</label>
+                        <select id="imageSize">
+                            <option value="fit">Fit to Area</option>
+                            <option value="stretch">Stretch to Fill</option>
+                            <option value="original">Original Size</option>
+                            <option value="repeat">Repeat Pattern</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageOpacity">Image Opacity</label>
+                        <div class="slider-container">
+                            <input type="range" id="imageOpacity" min="0" max="100" value="50">
+                            <span class="slider-value" id="imageOpacityValue">50%</span>
+                        </div>
+                    </div>
+                    <div class="image-controls">
+                        <button id="removeImageBtn" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3><i class="fas fa-text-height"></i> Custom Text</h3>
+                    <div class="form-group">
+                        <label for="customText">Text to Add</label>
+                        <input type="text" id="customText" placeholder="Enter custom text">
+                    </div>
+                    <div class="form-group">
+                        <label for="customTextColor">Text Color</label>
+                        <div class="color-picker-container">
+                            <input type="color" id="customTextColor" value="#ffffff">
+                            <span class="color-value">White</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customTextPosition">Text Position</label>
+                        <select id="customTextPosition">
+                            <option value="spacebar">Spacebar</option>
+                            <option value="top-case">Top Case</option>
+                            <option value="bottom-case">Bottom Case</option>
+                            <option value="left-side">Left Side</option>
+                            <option value="right-side">Right Side</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="customTextSize">Text Size</label>
+                        <div class="slider-container">
+                            <input type="range" id="customTextSize" min="8" max="48" value="16">
+                            <span class="slider-value" id="customTextSizeValue">16px</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customTextOpacity">Text Opacity</label>
+                        <div class="slider-container">
+                            <input type="range" id="customTextOpacity" min="0" max="100" value="100">
+                            <span class="slider-value" id="customTextOpacityValue">100%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <button id="downloadBtn" class="btn btn-accent" style="width: 100%;">
+                        <i class="fas fa-download"></i> Download Design
+                    </button>
+                </div>
+            </div>
+            
+            <div class="keyboard-display">
+                <div class="keyboard">
+                    <canvas id="keyboardCanvas" width="1000" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Gallery</a>
+                <a href="#">About Us</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Keyboard Brothers. All rights reserved.
+            </div>
+        </div>
+    </footer>
     <script>
         /**
          * KEYBOARD CUSTOMIZER CORE FUNCTIONALITY
@@ -380,10 +1121,147 @@
 
             // Layout definitions (abbreviated - full definitions would go here)
             const layouts = {
-                'iso-109': { /* ... */ },
-                'iso-105': { /* ... */ },
-                // ... all other layouts
-            };
+                    // ISO 109-key layout
+                    'iso-109': {
+                        name: "ISO 109-key",
+                        keys: [
+                            // Function row
+                            {x: 20, y: 20, width: 45, height: 45, type: 'modifier', label: 'Esc'},
+                            {x: 75, y: 20, width: 45, height: 45, label: 'F1'},
+                            {x: 130, y: 20, width: 45, height: 45, label: 'F2'},
+                            {x: 185, y: 20, width: 45, height: 45, label: 'F3'},
+                            {x: 240, y: 20, width: 45, height: 45, label: 'F4'},
+                            {x: 305, y: 20, width: 45, height: 45, label: 'F5'},
+                            {x: 360, y: 20, width: 45, height: 45, label: 'F6'},
+                            {x: 415, y: 20, width: 45, height: 45, label: 'F7'},
+                            {x: 470, y: 20, width: 45, height: 45, label: 'F8'},
+                            {x: 535, y: 20, width: 45, height: 45, label: 'F9'},
+                            {x: 590, y: 20, width: 45, height: 45, label: 'F10'},
+                            {x: 645, y: 20, width: 45, height: 45, label: 'F11'},
+                            {x: 700, y: 20, width: 45, height: 45, label: 'F12'},
+                            {x: 765, y: 20, width: 45, height: 45, type: 'modifier', label: 'PrtSc'},
+                            {x: 820, y: 20, width: 45, height: 45, type: 'modifier', label: 'ScrLk'},
+                            {x: 875, y: 20, width: 45, height: 45, type: 'modifier', label: 'Pause'},
+                            
+                            // First row
+                            {x: 20, y: 75, width: 45, height: 45, label: '`'},
+                            {x: 75, y: 75, width: 45, height: 45, label: '1'},
+                            {x: 130, y: 75, width: 45, height: 45, label: '2'},
+                            {x: 185, y: 75, width: 45, height: 45, label: '3'},
+                            {x: 240, y: 75, width: 45, height: 45, label: '4'},
+                            {x: 295, y: 75, width: 45, height: 45, label: '5'},
+                            {x: 350, y: 75, width: 45, height: 45, label: '6'},
+                            {x: 405, y: 75, width: 45, height: 45, label: '7'},
+                            {x: 460, y: 75, width: 45, height: 45, label: '8'},
+                            {x: 515, y: 75, width: 45, height: 45, label: '9'},
+                            {x: 570, y: 75, width: 45, height: 45, label: '0'},
+                            {x: 625, y: 75, width: 45, height: 45, label: '-'},
+                            {x: 680, y: 75, width: 45, height: 45, label: '='},
+                            {x: 735, y: 75, width: 90, height: 45, type: 'modifier', label: 'Backspace'},
+                            {x: 835, y: 75, width: 45, height: 45, type: 'modifier', label: 'Ins'},
+                            {x: 890, y: 75, width: 45, height: 45, type: 'modifier', label: 'Home'},
+                            {x: 945, y: 75, width: 45, height: 45, type: 'modifier', label: 'PgUp'},
+                            
+                            // Second row
+                            {x: 20, y: 130, width: 67, height: 45, type: 'modifier', label: 'Tab'},
+                            {x: 97, y: 130, width: 45, height: 45, label: 'Q'},
+                            {x: 152, y: 130, width: 45, height: 45, label: 'W'},
+                            {x: 207, y: 130, width: 45, height: 45, label: 'E'},
+                            {x: 262, y: 130, width: 45, height: 45, label: 'R'},
+                            {x: 317, y: 130, width: 45, height: 45, label: 'T'},
+                            {x: 372, y: 130, width: 45, height: 45, label: 'Y'},
+                            {x: 427, y: 130, width: 45, height: 45, label: 'U'},
+                            {x: 482, y: 130, width: 45, height: 45, label: 'I'},
+                            {x: 537, y: 130, width: 45, height: 45, label: 'O'},
+                            {x: 592, y: 130, width: 45, height: 45, label: 'P'},
+                            {x: 647, y: 130, width: 45, height: 45, label: '['},
+                            {x: 702, y: 130, width: 45, height: 45, label: ']'},
+                            {x: 757, y: 130, width: 68, height: 45, type: 'modifier', label: '\\'},
+                            {x: 835, y: 130, width: 45, height: 45, type: 'modifier', label: 'Del'},
+                            {x: 890, y: 130, width: 45, height: 45, type: 'modifier', label: 'End'},
+                            {x: 945, y: 130, width: 45, height: 45, type: 'modifier', label: 'PgDn'},
+                            
+                            // Third row
+                            {x: 20, y: 185, width: 80, height: 45, type: 'modifier', label: 'Caps'},
+                            {x: 110, y: 185, width: 45, height: 45, label: 'A'},
+                            {x: 165, y: 185, width: 45, height: 45, label: 'S'},
+                            {x: 220, y: 185, width: 45, height: 45, label: 'D'},
+                            {x: 275, y: 185, width: 45, height: 45, label: 'F'},
+                            {x: 330, y: 185, width: 45, height: 45, label: 'G'},
+                            {x: 385, y: 185, width: 45, height: 45, label: 'H'},
+                            {x: 440, y: 185, width: 45, height: 45, label: 'J'},
+                            {x: 495, y: 185, width: 45, height: 45, label: 'K'},
+                            {x: 550, y: 185, width: 45, height: 45, label: 'L'},
+                            {x: 605, y: 185, width: 45, height: 45, label: ';'},
+                            {x: 660, y: 185, width: 45, height: 45, label: "'"},
+                            {x: 715, y: 185, width: 110, height: 45, type: 'modifier', label: 'Enter'},
+                            
+                            // Fourth row
+                            {x: 20, y: 240, width: 95, height: 45, type: 'modifier', label: 'Shift'},
+                            {x: 125, y: 240, width: 45, height: 45, label: 'Z'},
+                            {x: 180, y: 240, width: 45, height: 45, label: 'X'},
+                            {x: 235, y: 240, width: 45, height: 45, label: 'C'},
+                            {x: 290, y: 240, width: 45, height: 45, label: 'V'},
+                            {x: 345, y: 240, width: 45, height: 45, label: 'B'},
+                            {x: 400, y: 240, width: 45, height: 45, label: 'N'},
+                            {x: 455, y: 240, width: 45, height: 45, label: 'M'},
+                            {x: 510, y: 240, width: 45, height: 45, label: ','},
+                            {x: 565, y: 240, width: 45, height: 45, label: '.'},
+                            {x: 620, y: 240, width: 45, height: 45, label: '/'},
+                            {x: 675, y: 240, width: 150, height: 45, type: 'modifier', label: 'Shift'},
+                            
+                            // Fifth row
+                            {x: 20, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
+                            {x: 95, y: 295, width: 65, height: 45, type: 'modifier', label: 'Win'},
+                            {x: 170, y: 295, width: 65, height: 45, type: 'modifier', label: 'Alt'},
+                            {x: 245, y: 295, width: 280, height: 45, type: 'spacebar', label: ''},
+                            {x: 535, y: 295, width: 65, height: 45, type: 'modifier', label: 'Alt'},
+                            {x: 610, y: 295, width: 65, height: 45, type: 'modifier', label: 'Win'},
+                            {x: 685, y: 295, width: 65, height: 45, type: 'modifier', label: 'Menu'},
+                            {x: 760, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
+                            
+                            // Arrow keys
+                            {x: 835, y: 240, width: 45, height: 45, type: 'modifier', label: '↑'},
+                            {x: 835, y: 295, width: 45, height: 45, type: 'modifier', label: '↓'},
+                            {x: 780, y: 295, width: 45, height: 45, type: 'modifier', label: '←'},
+                            {x: 890, y: 295, width: 45, height: 45, type: 'modifier', label: '→'},
+                            
+                            // Numpad
+                            {x: 945, y: 185, width: 45, height: 45, type: 'modifier', label: 'Num'},
+                            {x: 945, y: 240, width: 45, height: 45, label: '/'},
+                            {x: 945, y: 295, width: 45, height: 45, label: '*'},
+                            {x: 945, y: 350, width: 45, height: 45, label: '-'},
+                            
+                            {x: 835, y: 185, width: 45, height: 45, label: '7'},
+                            {x: 890, y: 185, width: 45, height: 45, label: '8'},
+                            {x: 945, y: 185, width: 45, height: 45, label: '9'},
+                            {x: 835, y: 240, width: 45, height: 45, label: '4'},
+                            {x: 890, y: 240, width: 45, height: 45, label: '5'},
+                            {x: 945, y: 240, width: 45, height: 45, label: '6'},
+                            {x: 835, y: 295, width: 45, height: 45, label: '1'},
+                            {x: 890, y: 295, width: 45, height: 45, label: '2'},
+                            {x: 945, y: 295, width: 45, height: 45, label: '3'},
+                            {x: 835, y: 350, width: 90, height: 45, label: '0'},
+                            {x: 945, y: 350, width: 45, height: 45, label: '.'},
+                            {x: 945, y: 405, width: 45, height: 45, label: '+'},
+                            {x: 835, y: 405, width: 155, height: 45, type: 'modifier', label: 'Enter'}
+                        ]
+                    },
+                    // Other layouts
+                    'iso-105': getISO105Layout(),
+                    'iso-101': getISO101Layout(),
+                    'iso-88': getISO88Layout(),
+                    'iso-85': getISO85Layout(),
+                    'iso-69': getISO69Layout(),
+                    'iso-62': getISO62Layout(),
+                    'ansi-108': getANSI108Layout(),
+                    'ansi-104': getANSI104Layout(),
+                    'ansi-100': getANSI100Layout(),
+                    'ansi-87': getANSI87Layout(),
+                    'ansi-84': getANSI84Layout(),
+                    'ansi-68': getANSI68Layout(),
+                    'ansi-61': getANSI61Layout()
+                };
 
             // Helper functions for layout generation
             function createISOLayout() { /* ... */ }
