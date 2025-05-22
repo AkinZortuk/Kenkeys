@@ -984,7 +984,6 @@
 
                 const prevAlpha = ctx.globalAlpha;
                 ctx.globalAlpha = opacity;
-                ctx.globalAlpha = prevAlpha;
                 
                 let x = 0, y = 0, width = canvas.width, height = canvas.height;
 
@@ -1039,8 +1038,8 @@
                     default: // stretch
                         ctx.drawImage(uploadedImage, x, y, width, height);
                 }
-
-                ctx.globalAlpha = 1.0;
+                
+                ctx.globalAlpha = prevAlpha;
             }
 
             /**
