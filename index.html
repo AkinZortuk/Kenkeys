@@ -1230,10 +1230,9 @@
                 drawKeyboard();
             }
 
-            // Layout definitions
-            const layouts = {
-                // ISO 109-key layout
-                'iso-109': {
+            // First define all layout creation functions
+            function createISO109Layout() {
+                return {
                     name: "ISO 109-key",
                     keys: [
                         // Function row
@@ -1357,26 +1356,11 @@
                         {x: 945, y: 405, width: 45, height: 45, label: '+'},
                         {x: 835, y: 405, width: 155, height: 45, type: 'modifier', label: 'Enter'}
                     ]
-                },
-                // Other layouts
-                'iso-105': getISO105Layout(),
-                'iso-101': getISO101Layout(),
-                'iso-88': getISO88Layout(),
-                'iso-85': getISO85Layout(),
-                'iso-69': getISO69Layout(),
-                'iso-62': getISO62Layout(),
-                'ansi-108': getANSI108Layout(),
-                'ansi-104': getANSI104Layout(),
-                'ansi-100': getANSI100Layout(),
-                'ansi-87': getANSI87Layout(),
-                'ansi-84': getANSI84Layout(),
-                'ansi-68': getANSI68Layout(),
-                'ansi-61': getANSI61Layout()
-            };
-            
-            // Simplified layout functions for other sizes
-            function getISO105Layout() {
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+                };
+            }
+
+            function createISO105Layout(baseLayout) {
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ISO 105-key";
                 // Remove some keys to make it 105-key
                 layout.keys = layout.keys.filter(key => 
@@ -1384,16 +1368,16 @@
                 );
                 return layout;
             }
-            
-            function getISO101Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createISO101Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ISO 101-key";
                 // Modify layout for 1800 compact
                 return layout;
             }
-            
-            function getISO88Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createISO88Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ISO 88-key TKL";
                 // Remove numpad for TKL
                 layout.keys = layout.keys.filter(key => 
@@ -1407,9 +1391,9 @@
                 );
                 return layout;
             }
-            
-            function getISO85Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createISO85Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ISO 85-key 75%";
                 // Remove function row and numpad for 75%
                 layout.keys = layout.keys.filter(key => 
@@ -1424,9 +1408,9 @@
                 );
                 return layout;
             }
-            
-            function getISO69Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createISO69Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ISO 69-key 65%";
                 // Remove function row, numpad, and some other keys for 65%
                 layout.keys = layout.keys.filter(key => 
@@ -1445,9 +1429,9 @@
                 );
                 return layout;
             }
-            
-            function getISO62Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createISO62Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ISO 62-key 60%";
                 // Remove function row, numpad, arrow keys, etc. for 60%
                 layout.keys = layout.keys.filter(key => 
@@ -1467,9 +1451,9 @@
                 );
                 return layout;
             }
-            
-            function getANSI108Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createANSI108Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ANSI 108-key";
                 // Modify Enter key and left shift for ANSI
                 layout.keys.forEach(key => {
@@ -1487,9 +1471,9 @@
                 });
                 return layout;
             }
-            
-            function getANSI104Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createANSI104Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ANSI 104-key";
                 // Remove some keys and modify for ANSI
                 layout.keys = layout.keys.filter(key => 
@@ -1511,16 +1495,16 @@
                 });
                 return layout;
             }
-            
-            function getANSI100Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createANSI100Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ANSI 100-key 1800";
                 // Compact layout for 1800
                 return layout;
             }
-            
-            function getANSI87Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createANSI87Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ANSI 87-key TKL";
                 // Remove numpad for TKL
                 layout.keys = layout.keys.filter(key => 
@@ -1548,9 +1532,9 @@
                 });
                 return layout;
             }
-            
-            function getANSI84Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createANSI84Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ANSI 84-key 75%";
                 // Remove function row and numpad for 75%
                 layout.keys = layout.keys.filter(key => 
@@ -1579,9 +1563,9 @@
                 });
                 return layout;
             }
-            
-            function getANSI68Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createANSI68Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ANSI 68-key 65%";
                 // Remove function row, numpad, and some other keys for 65%
                 layout.keys = layout.keys.filter(key => 
@@ -1614,9 +1598,9 @@
                 });
                 return layout;
             }
-            
-            function getANSI61Layout() { 
-                const layout = JSON.parse(JSON.stringify(getLayout('iso-109')));
+
+            function createANSI61Layout(baseLayout) { 
+                const layout = JSON.parse(JSON.stringify(baseLayout));
                 layout.name = "ANSI 61-key 60%";
                 // Remove function row, numpad, arrow keys, etc. for 60%
                 layout.keys = layout.keys.filter(key => 
@@ -1651,6 +1635,38 @@
                 return layout;
             }
 
+            // Now initialize the layouts object after all creation functions are defined
+            const baseISO109Layout = createISO109Layout();
+            const layouts = {
+                'iso-109': baseISO109Layout,
+                'iso-105': createISO105Layout(baseISO109Layout),
+                'iso-101': createISO101Layout(baseISO109Layout),
+                'iso-88': createISO88Layout(baseISO109Layout),
+                'iso-85': createISO85Layout(baseISO109Layout),
+                'iso-69': createISO69Layout(baseISO109Layout),
+                'iso-62': createISO62Layout(baseISO109Layout),
+                'ansi-108': createANSI108Layout(baseISO109Layout),
+                'ansi-104': createANSI104Layout(baseISO109Layout),
+                'ansi-100': createANSI100Layout(baseISO109Layout),
+                'ansi-87': createANSI87Layout(baseISO109Layout),
+                'ansi-84': createANSI84Layout(baseISO109Layout),
+                'ansi-68': createANSI68Layout(baseISO109Layout),
+                'ansi-61': createANSI61Layout(baseISO109Layout)
+            };
+
+            /**
+             * Get layout by type with validation
+             * @param {string} layoutType - The layout identifier
+             * @returns {Object} The keyboard layout
+             */
+            function getLayout(layoutType) {
+                const layout = layouts[layoutType];
+                if (!layout) {
+                    console.error(`Layout ${layoutType} not found, defaulting to ISO 109-key`);
+                    return layouts['iso-109'];
+                }
+                return layout;
+            }
             // Initialize the keyboard
             initKeyboard();
         });
