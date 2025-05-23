@@ -1351,47 +1351,47 @@ function createISO109Layout() {
             {x: 455, y: 240, width: 45, height: 45, label: 'M'},
             {x: 510, y: 240, width: 45, height: 45, label: ','},
             {x: 565, y: 240, width: 45, height: 45, label: '.'},
-            {x: 620, y: 240, width: 45, height: 45, label: '/'},
-            {x: 675, y: 240, width: 150, height: 45, type: 'modifier', label: 'Shift'},
+            {x: 620, y: 240, width: 100, height: 45, type: 'modifier', label: 'Shift'},
+            {x: 835, y: 240, width: 45, height: 45, type: 'modifier', label: '↑'},
 
-            // Spacebar Row
-            {x: 20, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
-            {x: 95, y: 295, width: 65, height: 45, type: 'modifier', label: 'Win'},
-            {x: 170, y: 295, width: 65, height: 45, type: 'modifier', label: 'Alt'},
-            {x: 245, y: 295, width: 280, height: 45, type: 'spacebar', label: ''},
-            {x: 535, y: 295, width: 65, height: 45, type: 'modifier', label: 'Alt Gr'},
-            {x: 610, y: 295, width: 65, height: 45, type: 'modifier', label: 'Win'},
-            {x: 685, y: 295, width: 65, height: 45, type: 'modifier', label: 'Menu'},
-            {x: 760, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
+            // Bottom Row
+            {x: 20, y: 295, width: 60, height: 45, type: 'modifier', label: 'Ctrl'},
+            {x: 85, y: 295, width: 60, height: 45, type: 'modifier', label: 'Win'},
+            {x: 150, y: 295, width: 60, height: 45, type: 'modifier', label: 'Alt'},
+            {x: 215, y: 295, width: 360, height: 45, type: 'space', label: ''},
+            {x: 580, y: 295, width: 60, height: 45, type: 'modifier', label: 'AltGr'},
+            {x: 645, y: 295, width: 60, height: 45, type: 'modifier', label: 'Menu'},
+            {x: 710, y: 295, width: 60, height: 45, type: 'modifier', label: 'Ctrl'},
+            {x: 780, y: 295, width: 45, height: 45, type: 'modifier', label: '←'},
+            {x: 835, y: 295, width: 45, height: 45, type: 'modifier', label: '↓'},
+            {x: 890, y: 295, width: 45, height: 45, type: 'modifier', label: '→'},
 
-            // Arrow Keys (proper T-shape)
-            {x: 760, y: 240, width: 45, height: 45, type: 'modifier', label: '↑'},
-            {x: 715, y: 295, width: 45, height: 45, type: 'modifier', label: '←'},
-            {x: 760, y: 295, width: 45, height: 45, type: 'modifier', label: '↓'},
-            {x: 805, y: 295, width: 45, height: 45, type: 'modifier', label: '→'},
+            // Numpad Section
+            {x: 945, y: 185, width: 45, height: 45, label: 'Num'},
+            {x: 1000, y: 185, width: 45, height: 45, label: '/'},
+            {x: 1055, y: 185, width: 45, height: 45, label: '*'},
+            {x: 1110, y: 185, width: 45, height: 45, label: '-'},
 
-            // Numpad
-            {x: 835, y: 75, width: 45, height: 45, type: 'modifier', label: 'Num'},
-            {x: 890, y: 75, width: 45, height: 45, label: '/'},
-            {x: 945, y: 75, width: 45, height: 45, label: '*'},
-            {x: 945, y: 130, width: 45, height: 45, label: '-'},
-            
-            {x: 835, y: 130, width: 45, height: 45, label: '7'},
-            {x: 890, y: 130, width: 45, height: 45, label: '8'},
-            {x: 945, y: 130, width: 45, height: 45, label: '9'},
-            {x: 835, y: 185, width: 45, height: 45, label: '4'},
-            {x: 890, y: 185, width: 45, height: 45, label: '5'},
-            {x: 945, y: 185, width: 45, height: 45, label: '6'},
-            {x: 835, y: 240, width: 45, height: 45, label: '1'},
-            {x: 890, y: 240, width: 45, height: 45, label: '2'},
-            {x: 945, y: 240, width: 45, height: 45, label: '3'},
-            {x: 835, y: 295, width: 90, height: 45, label: '0'},
-            {x: 945, y: 295, width: 45, height: 45, label: '.'},
-            {x: 945, y: 350, width: 45, height: 45, label: '+'},
-            {x: 835, y: 350, width: 155, height: 45, type: 'modifier', label: 'Enter'}
+            {x: 945, y: 240, width: 45, height: 45, label: '7'},
+            {x: 1000, y: 240, width: 45, height: 45, label: '8'},
+            {x: 1055, y: 240, width: 45, height: 45, label: '9'},
+            {x: 1110, y: 240, width: 45, height: 90, label: '+'},
+
+            {x: 945, y: 295, width: 45, height: 45, label: '4'},
+            {x: 1000, y: 295, width: 45, height: 45, label: '5'},
+            {x: 1055, y: 295, width: 45, height: 45, label: '6'},
+
+            {x: 945, y: 350, width: 45, height: 45, label: '1'},
+            {x: 1000, y: 350, width: 45, height: 45, label: '2'},
+            {x: 1055, y: 350, width: 45, height: 45, label: '3'},
+            {x: 1110, y: 350, width: 45, height: 90, label: 'Enter'},
+
+            {x: 945, y: 405, width: 100, height: 45, label: '0'},
+            {x: 1055, y: 405, width: 45, height: 45, label: '.'}
         ]
     };
 }
+
 
             function createISO105Layout(baseLayout) {
                 const layout = JSON.parse(JSON.stringify(baseLayout));
