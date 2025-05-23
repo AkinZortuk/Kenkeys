@@ -1269,47 +1269,78 @@ function createISO109Layout() {
     return {
         name: "ISO 109-key",
         keys: [
-            // Function Row (grouped 1-4-4-4-3 with spaces)
-            {x: 20, y: 20, width: 45, height: 45, type: 'modifier', label: 'Esc'},
-            {x: 85, y: 20, width: 45, height: 45, label: 'F1'},
-            {x: 140, y: 20, width: 45, height: 45, label: 'F2'},
-            {x: 195, y: 20, width: 45, height: 45, label: 'F3'},
-            {x: 250, y: 20, width: 45, height: 45, label: 'F4'},
-            {x: 320, y: 20, width: 45, height: 45, label: 'F5'},
-            {x: 375, y: 20, width: 45, height: 45, label: 'F6'},
-            {x: 430, y: 20, width: 45, height: 45, label: 'F7'},
-            {x: 485, y: 20, width: 45, height: 45, label: 'F8'},
-            {x: 555, y: 20, width: 45, height: 45, label: 'F9'},
-            {x: 610, y: 20, width: 45, height: 45, label: 'F10'},
-            {x: 665, y: 20, width: 45, height: 45, label: 'F11'},
-            {x: 720, y: 20, width: 45, height: 45, label: 'F12'},
-            {x: 790, y: 20, width: 45, height: 45, type: 'modifier', label: 'PrtSc'},
-            {x: 845, y: 20, width: 45, height: 45, type: 'modifier', label: 'ScrLk'},
-            {x: 900, y: 20, width: 45, height: 45, type: 'modifier', label: 'Pause'},
-            // Additional keys above numpad
-            {x: 955, y: 20, width: 45, height: 45, type: 'modifier', label: 'Insert'},
-            {x: 1010, y: 20, width: 45, height: 45, type: 'modifier', label: 'Home'},
-            {x: 1065, y: 20, width: 45, height: 45, type: 'modifier', label: 'Page Up'},
+            // Row 1: Escape and F keys (4 + 4 + 4 groups) with Esc at start
+  { x: 20, y: 20, width: 45, height: 45, label: "Esc" },
 
-            // Number Row
-            {x: 20, y: 75, width: 45, height: 45, label: '`'},
-            {x: 75, y: 75, width: 45, height: 45, label: '1'},
-            {x: 130, y: 75, width: 45, height: 45, label: '2'},
-            {x: 185, y: 75, width: 45, height: 45, label: '3'},
-            {x: 240, y: 75, width: 45, height: 45, label: '4'},
-            {x: 295, y: 75, width: 45, height: 45, label: '5'},
-            {x: 350, y: 75, width: 45, height: 45, label: '6'},
-            {x: 405, y: 75, width: 45, height: 45, label: '7'},
-            {x: 460, y: 75, width: 45, height: 45, label: '8'},
-            {x: 515, y: 75, width: 45, height: 45, label: '9'},
-            {x: 570, y: 75, width: 45, height: 45, label: '0'},
-            {x: 625, y: 75, width: 45, height: 45, label: '-'},
-            {x: 680, y: 75, width: 45, height: 45, label: '='},
-            {x: 735, y: 75, width: 90, height: 45, type: 'modifier', label: 'Backspace'},
-            // Navigation keys aligned with numpad start
-            {x: 955, y: 75, width: 45, height: 45, type: 'modifier', label: 'Delete'},
-            {x: 1010, y: 75, width: 45, height: 45, type: 'modifier', label: 'End'},
-            {x: 1065, y: 75, width: 45, height: 45, type: 'modifier', label: 'Page Down'},
+  // Group 1 (F1-F4)
+  { x: 75, y: 20, width: 45, height: 45, label: "F1" },
+  { x: 120, y: 20, width: 45, height: 45, label: "F2" },
+  { x: 165, y: 20, width: 45, height: 45, label: "F3" },
+  { x: 210, y: 20, width: 45, height: 45, label: "F4" },
+
+  // One key space gap (45 px)
+  // Group 2 (F5-F8)
+  { x: 300, y: 20, width: 45, height: 45, label: "F5" },
+  { x: 345, y: 20, width: 45, height: 45, label: "F6" },
+  { x: 390, y: 20, width: 45, height: 45, label: "F7" },
+  { x: 435, y: 20, width: 45, height: 45, label: "F8" },
+
+  // One key space gap
+  // Group 3 (F9-F12)
+  { x: 525, y: 20, width: 45, height: 45, label: "F9" },
+  { x: 570, y: 20, width: 45, height: 45, label: "F10" },
+  { x: 615, y: 20, width: 45, height: 45, label: "F11" },
+  { x: 660, y: 20, width: 45, height: 45, label: "F12" },
+
+  // Three extra keys on top of navigation cluster (Home/Page Up etc) (aligned with F row)
+  { x: 780, y: 20, width: 45, height: 45, label: "E1" },
+  { x: 825, y: 20, width: 45, height: 45, label: "E2" },
+  { x: 870, y: 20, width: 45, height: 45, label: "E3" },
+
+  // Navigation cluster row 1 (Insert, Home, Page Up, Num Lock to the right of Page Up)
+  { x: 780, y: 75, width: 45, height: 45, label: "Insert" },
+  { x: 825, y: 75, width: 45, height: 45, label: "Home" },
+  { x: 870, y: 75, width: 45, height: 45, label: "Page Up" },
+  { x: 915, y: 75, width: 45, height: 45, label: "Num Lock" },
+
+  // Navigation cluster row 2 (Delete, End, Page Down)
+  { x: 780, y: 120, width: 45, height: 45, label: "Delete" },
+  { x: 825, y: 120, width: 45, height: 45, label: "End" },
+  { x: 870, y: 120, width: 45, height: 45, label: "Page Down" },
+
+  // Numpad top row (/, *, -) aligned under End key, shifted right
+  { x: 915, y: 120, width: 45, height: 45, label: "/" },
+  { x: 960, y: 120, width: 45, height: 45, label: "*" },
+  { x: 1005, y: 120, width: 45, height: 45, label: "-" },
+
+  // Numpad number keys and plus key vertically aligned
+  { x: 915, y: 165, width: 45, height: 45, label: "7" },
+  { x: 960, y: 165, width: 45, height: 45, label: "8" },
+  { x: 1005, y: 165, width: 45, height: 45, label: "9" },
+  { x: 1050, y: 165, width: 45, height: 95, label: "+" },
+
+  { x: 915, y: 210, width: 45, height: 45, label: "4" },
+  { x: 960, y: 210, width: 45, height: 45, label: "5" },
+  { x: 1005, y: 210, width: 45, height: 45, label: "6" },
+
+  { x: 915, y: 255, width: 45, height: 45, label: "1" },
+  { x: 960, y: 255, width: 45, height: 45, label: "2" },
+  { x: 1005, y: 255, width: 45, height: 45, label: "3" },
+  { x: 1050, y: 255, width: 45, height: 95, label: "Enter" },
+
+  { x: 915, y: 300, width: 90, height: 45, label: "0" },
+  { x: 1005, y: 300, width: 45, height: 45, label: "." },
+
+  // Arrow keys aligned horizontally with Insert/Home/Page Up cluster
+  { x: 735, y: 255, width: 45, height: 45, label: "↑" },
+  { x: 690, y: 300, width: 45, height: 45, label: "←" },
+  { x: 735, y: 300, width: 45, height: 45, label: "↓" },
+  { x: 780, y: 300, width: 45, height: 45, label: "→" },
+
+  // Right side keys vertically aligned (Shift, Ctrl, Enter)
+  { x: 600, y: 240, width: 60, height: 45, label: "Shift" },
+  { x: 600, y: 295, width: 60, height: 45, label: "Ctrl" },
+  { x: 1050, y: 255, width: 45, height: 95, label: "Enter" },
 
             // QWERTY Row
             {x: 20, y: 130, width: 67, height: 45, type: 'modifier', label: 'Tab'},
@@ -1326,10 +1357,6 @@ function createISO109Layout() {
             {x: 647, y: 130, width: 45, height: 45, label: '['},
             {x: 702, y: 130, width: 45, height: 45, label: ']'},
             {x: 757, y: 130, width: 68, height: 45, type: 'modifier', label: '\\'},
-            // Numpad top row
-            {x: 955, y: 130, width: 45, height: 45, type: 'modifier', label: 'Num\nLock'},
-            {x: 1010, y: 130, width: 45, height: 45, type: 'modifier', label: '/'},
-            {x: 1065, y: 130, width: 45, height: 45, type: 'modifier', label: '*'},
 
             // ASDF Row
             {x: 20, y: 185, width: 80, height: 45, type: 'modifier', label: 'Caps Lock'},
@@ -1345,11 +1372,6 @@ function createISO109Layout() {
             {x: 605, y: 185, width: 45, height: 45, label: ';'},
             {x: 660, y: 185, width: 45, height: 45, label: '\''},
             {x: 715, y: 185, width: 110, height: 45, type: 'modifier', label: 'Enter'},
-            // Numpad second row
-            {x: 955, y: 185, width: 45, height: 45, label: '7'},
-            {x: 1010, y: 185, width: 45, height: 45, label: '8'},
-            {x: 1065, y: 185, width: 45, height: 45, label: '9'},
-            {x: 1120, y: 185, width: 45, height: 95, label: '+'}, // Double height
 
             // ZXCV Row
             {x: 20, y: 240, width: 70, height: 45, type: 'modifier', label: 'Shift'},
@@ -1365,12 +1387,6 @@ function createISO109Layout() {
             {x: 590, y: 240, width: 45, height: 45, label: '.'},
             {x: 645, y: 240, width: 45, height: 45, label: '/'},
             {x: 700, y: 240, width: 125, height: 45, type: 'modifier', label: 'Shift'},
-            // Arrow keys aligned with navigation cluster
-            {x: 835, y: 240, width: 45, height: 45, label: '↑'},
-            // Numpad third row
-            {x: 955, y: 240, width: 45, height: 45, label: '4'},
-            {x: 1010, y: 240, width: 45, height: 45, label: '5'},
-            {x: 1065, y: 240, width: 45, height: 45, label: '6'},
 
             // Bottom Row
             {x: 20, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
@@ -1380,14 +1396,7 @@ function createISO109Layout() {
             {x: 545, y: 295, width: 65, height: 45, type: 'modifier', label: 'AltGr'},
             {x: 615, y: 295, width: 65, height: 45, type: 'modifier', label: 'Menu'},
             {x: 685, y: 295, width: 65, height: 45, type: 'modifier', label: 'Ctrl'},
-            // Arrow keys
-            {x: 790, y: 295, width: 45, height: 45, label: '←'},
-            {x: 835, y: 295, width: 45, height: 45, label: '↓'},
-            {x: 880, y: 295, width: 45, height: 45, label: '→'},
-            // Numpad bottom row
-            {x: 955, y: 295, width: 100, height: 45, label: '0'}, // Double width
-            {x: 1065, y: 295, width: 45, height: 45, label: '.'},
-            {x: 1120, y: 295, width: 45, height: 45, type: 'modifier', label: 'Enter'}
+
         ]
     };
 }
