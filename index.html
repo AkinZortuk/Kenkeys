@@ -17,20 +17,20 @@
             --white: #f0f0f0;
             --accent: #ffffff;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Montserrat', sans-serif;
             color: var(--white);
             background-color: var(--black);
             line-height: 1.6;
         }
-        
+
         header {
             background-color: var(--dark-gray);
             padding: 1.5rem 3rem;
@@ -40,19 +40,19 @@
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
             border-bottom: 1px solid var(--light-gray);
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
         }
-        
+
         .logo-icon {
             font-size: 2rem;
             color: var(--white);
         }
-        
+
         .logo-text {
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
@@ -60,22 +60,22 @@
             color: var(--white);
             letter-spacing: 1px;
         }
-        
+
         .logo-text span {
             color: var(--accent);
             font-style: italic;
         }
-        
+
         nav ul {
             display: flex;
             list-style: none;
         }
-        
+
         nav ul li {
             margin-left: 2rem;
             position: relative;
         }
-        
+
         nav ul li a {
             color: var(--white);
             text-decoration: none;
@@ -84,11 +84,11 @@
             font-size: 0.95rem;
             letter-spacing: 0.5px;
         }
-        
+
         nav ul li a:hover {
             color: var(--accent);
         }
-        
+
         nav ul li::after {
             content: '';
             position: absolute;
@@ -99,38 +99,38 @@
             background-color: var(--accent);
             transition: width 0.3s;
         }
-        
+
         nav ul li:hover::after {
             width: 100%;
         }
-        
+
         .container {
             max-width: 1600px;
             margin: 2rem auto;
             padding: 0 2rem;
         }
-        
+
         .page-title {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             font-weight: 300;
             color: var(--white);
         }
-        
+
         .page-subtitle {
             font-size: 1.1rem;
             margin-bottom: 2rem;
             color: var(--lightest-gray);
             font-weight: 400;
         }
-        
+
         .builder-container {
             display: flex;
             gap: 2rem;
             height: calc(100vh - 200px);
             min-height: 700px;
         }
-        
+
         .controls {
             width: 320px;
             background-color: var(--dark-gray);
@@ -139,7 +139,7 @@
             border: 1px solid var(--light-gray);
             overflow-y: auto;
         }
-        
+
         .keyboard-display {
             flex: 1;
             background-color: var(--dark-gray);
@@ -151,7 +151,7 @@
             align-items: center;
             position: relative;
         }
-        
+
 .keyboard {
     width: 100%;
     height: 100%;
@@ -171,17 +171,17 @@
     max-height: 100%;
     object-fit: contain;
 }
-        
+
         .control-section {
             margin-bottom: 2rem;
             padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--light-gray);
         }
-        
+
         .control-section:last-child {
             border-bottom: none;
         }
-        
+
         .control-section h3 {
             margin-bottom: 1.5rem;
             color: var(--white);
@@ -192,15 +192,15 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .control-section h3 i {
             color: var(--accent);
         }
-        
+
         .form-group {
             margin-bottom: 1.25rem;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 0.75rem;
@@ -208,7 +208,7 @@
             font-size: 0.9rem;
             color: var(--lightest-gray);
         }
-        
+
         select, input, textarea {
             width: 100%;
             padding: 0.8rem 1rem;
@@ -220,25 +220,25 @@
             color: var(--white);
             transition: all 0.3s;
         }
-        
+
         select:focus, input:focus, textarea:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
         }
-        
+
         .color-picker-container {
             display: flex;
             align-items: center;
             gap: 1rem;
             margin-top: 0.5rem;
         }
-        
+
         .color-picker-container label {
             margin-bottom: 0;
             flex: 1;
         }
-        
+
         .color-picker {
             width: 30px;
             height: 30px;
@@ -248,7 +248,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .color-picker input[type="color"] {
             position: absolute;
             top: -5px;
@@ -259,19 +259,19 @@
             cursor: pointer;
             opacity: 0;
         }
-        
+
         .color-preview {
             width: 100%;
             height: 100%;
             border-radius: 3px;
         }
-        
+
         .color-value {
             min-width: 70px;
             font-size: 0.85rem;
             color: var(--lightest-gray);
         }
-        
+
         .btn {
             background-color: var(--medium-gray);
             color: var(--white);
@@ -286,40 +286,40 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .btn:hover {
             background-color: var(--light-gray);
             border-color: var(--lighter-gray);
         }
-        
+
         .btn-accent {
             background-color: var(--white);
             color: var(--black);
             border-color: var(--white);
         }
-        
+
         .btn-accent:hover {
             background-color: var(--accent);
             border-color: var(--accent);
         }
-        
+
         .btn-danger {
             background-color: #3d2d2d;
             color: #ff6b6b;
             border-color: #5d3d3d;
         }
-        
+
         .btn-danger:hover {
             background-color: #5d3d3d;
             border-color: #7d5d5d;
         }
-        
+
         .color-groups {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 1rem;
         }
-        
+
         .color-group {
             border: 1px solid var(--light-gray);
             padding: 1rem;
@@ -328,30 +328,30 @@
             transition: all 0.3s;
             background-color: var(--medium-gray);
         }
-        
+
         .color-group:hover {
             border-color: var(--lighter-gray);
         }
-        
+
         .color-group.active {
             border-color: var(--accent);
             background-color: var(--light-gray);
             box-shadow: 0 0 0 1px var(--accent);
         }
-        
+
         .color-group h4 {
             margin-bottom: 0.75rem;
             font-size: 0.9rem;
             color: var(--white);
             font-weight: 500;
         }
-        
+
         .layout-options {
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
         }
-        
+
         .layout-option {
             flex: 1;
             min-width: 60px;
@@ -364,34 +364,34 @@
             font-size: 0.85rem;
             background-color: var(--medium-gray);
         }
-        
+
         .layout-option:hover {
             border-color: var(--lighter-gray);
         }
-        
+
         .layout-option.active {
             border-color: var(--accent);
             background-color: var(--light-gray);
             box-shadow: 0 0 0 1px var(--accent);
         }
-        
+
         .image-controls {
             display: flex;
             gap: 0.5rem;
             margin-top: 1rem;
         }
-        
+
         .image-controls .btn {
             flex: 1;
             justify-content: center;
         }
-        
+
         .slider-container {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
-        
+
         .slider-container input[type="range"] {
             flex: 1;
             -webkit-appearance: none;
@@ -400,7 +400,7 @@
             border-radius: 3px;
             outline: none;
         }
-        
+
         .slider-container input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -410,13 +410,13 @@
             background: var(--white);
             cursor: pointer;
         }
-        
+
         .slider-value {
             width: 40px;
             text-align: center;
             font-size: 0.9rem;
         }
-        
+
         footer {
             background-color: var(--dark-gray);
             color: var(--white);
@@ -425,7 +425,7 @@
             margin-top: 3rem;
             border-top: 1px solid var(--light-gray);
         }
-        
+
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -433,66 +433,66 @@
             flex-direction: column;
             gap: 1.5rem;
         }
-        
+
         .footer-links {
             display: flex;
             justify-content: center;
             gap: 2rem;
             flex-wrap: wrap;
         }
-        
+
         .footer-links a {
             color: var(--lightest-gray);
             text-decoration: none;
             transition: color 0.3s;
         }
-        
+
         .footer-links a:hover {
             color: var(--accent);
         }
-        
+
         .copyright {
             color: var(--lightest-gray);
             font-size: 0.9rem;
         }
-        
+
         @media (max-width: 1200px) {
             .builder-container {
                 flex-direction: column;
                 height: auto;
                 min-height: auto;
             }
-            
+
             .controls {
                 width: 100%;
                 order: 2;
             }
-            
+
             .keyboard-display {
                 height: 500px;
                 order: 1;
             }
         }
-        
+
         @media (max-width: 768px) {
             header {
                 padding: 1rem 1.5rem;
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+
             nav ul {
                 gap: 1rem;
             }
-            
+
             nav ul li {
                 margin-left: 0;
             }
-            
+
             .container {
                 padding: 0 1rem;
             }
-            
+
             .page-title {
                 font-size: 2rem;
             }
@@ -504,12 +504,12 @@
         min-height: auto;
         flex-direction: column;
     }
-    
+
     .controls {
         width: 100%;
         order: 2;
     }
-    
+
     .keyboard-display {
         height: 400px;
         order: 1;
@@ -520,7 +520,7 @@
     .keyboard-display {
         height: 300px;
     }
-    
+
     .color-groups {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -545,11 +545,11 @@
             </ul>
         </nav>
     </header>
-    
+
     <div class="container">
         <h1 class="page-title">Custom Keyboard Builder</h1>
         <p class="page-subtitle">Design your perfect mechanical keyboard with our premium customization tools</p>
-        
+
         <div class="builder-container">
             <div class="controls">
                 <div class="control-section">
@@ -583,7 +583,7 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="control-section">
                     <h3><i class="fas fa-palette"></i> Keycap Colors</h3>
                     <div class="form-group">
@@ -632,7 +632,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="control-section">
                     <h3><i class="fas fa-font"></i> Key Legends</h3>
                     <div class="form-group">
@@ -676,7 +676,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="control-section">
                     <h3><i class="fas fa-image"></i> Custom Image</h3>
                     <div class="form-group">
@@ -716,7 +716,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="control-section">
                     <h3><i class="fas fa-text-height"></i> Custom Text</h3>
                     <div class="form-group">
@@ -755,14 +755,14 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="control-section">
                     <button id="downloadBtn" class="btn btn-accent" style="width: 100%;">
                         <i class="fas fa-download"></i> Download Design
                     </button>
                 </div>
             </div>
-            
+
             <div class="keyboard-display">
                 <div class="keyboard">
                     <canvas id="keyboardCanvas" width="1000" height="400"></canvas>
@@ -770,7 +770,7 @@
             </div>
         </div>
     </div>
-    
+
     <footer>
         <div class="footer-content">
             <div class="footer-links">
@@ -828,10 +828,10 @@
             function initKeyboard() {
                 // Set up all event listeners
                 setupEventListeners();
-                
+
                 // Perform initial draw
                 drawKeyboard();
-                
+
                 // Log initialization
                 console.log('Keyboard customizer initialized');
             }
@@ -843,38 +843,38 @@
                 // Layout selection
                 document.getElementById('layoutType').addEventListener('change', handleLayoutTypeChange);
                 document.getElementById('keyboardSize').addEventListener('change', handleSizeChange);
-                
+
                 // Color controls
                 document.querySelectorAll('.color-group').forEach(group => {
                     group.addEventListener('click', handleColorGroupClick);
                 });
-                
+
                 // Color pickers
                 document.querySelectorAll('input[type="color"]').forEach(picker => {
                     picker.addEventListener('input', handleColorChange);
                 });
-                
+
                 // Legend controls
                 document.querySelectorAll('.layout-option').forEach(option => {
                     option.addEventListener('click', handleLegendPositionChange);
                 });
                 document.getElementById('keyboardLayout').addEventListener('change', drawKeyboard);
                 document.getElementById('textColor').addEventListener('input', handleTextColorChange);
-                
+
                 // Image controls
                 document.getElementById('keyboardImage').addEventListener('change', handleImageUpload);
                 document.getElementById('imagePosition').addEventListener('change', drawKeyboard);
                 document.getElementById('imageSize').addEventListener('change', drawKeyboard);
                 document.getElementById('removeImageBtn').addEventListener('click', handleRemoveImage);
-                
+
                 // Custom text
                 document.getElementById('customText').addEventListener('input', drawKeyboard);
                 document.getElementById('customTextColor').addEventListener('input', handleCustomTextColorChange);
                 document.getElementById('customTextPosition').addEventListener('change', drawKeyboard);
-                
+
                 // Download
                 document.getElementById('downloadBtn').addEventListener('click', handleDownload);
-                
+
                 // Sliders
                 document.getElementById('textSize').addEventListener('input', handleSliderChange);
                 document.getElementById('textOpacity').addEventListener('input', handleSliderChange);
@@ -890,24 +890,24 @@
                 try {
                     // Clear canvas
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
+
                     // Draw keyboard base
                     ctx.fillStyle = '#1a1a1a';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    
+
                     // Get current layout
                     const layout = getLayout(currentLayout);
                     validateLayout(layout);
-                    
+
                     // Draw keys
                     drawKeys(layout);
-                    
+
                     // Draw custom image if exists
                     drawCustomImage(layout);
-                    
+
                     // Draw custom text if exists
                     drawCustomText(layout);
-                    
+
                 } catch (error) {
                     console.error('Error drawing keyboard:', error);
                     showError('Failed to render keyboard. Please try again.');
@@ -984,7 +984,7 @@
 
                 const prevAlpha = ctx.globalAlpha;
                 ctx.globalAlpha = opacity;
-                
+
                 let x = 0, y = 0, width = canvas.width, height = canvas.height;
 
                 // Adjust position based on selection
@@ -1021,7 +1021,7 @@
                     case 'fit':
                         const imgRatio = uploadedImage.width / uploadedImage.height;
                         const areaRatio = width / height;
-                        
+
                         if (imgRatio > areaRatio) {
                             const newHeight = width / imgRatio;
                             ctx.drawImage(uploadedImage, x, y + (height - newHeight) / 2, width, newHeight);
@@ -1038,7 +1038,7 @@
                     default: // stretch
                         ctx.drawImage(uploadedImage, x, y, width, height);
                 }
-                
+
                 ctx.globalAlpha = prevAlpha;
             }
 
@@ -1142,47 +1142,54 @@
             }
 
             // Event handlers
-function handleLayoutTypeChange(e) {
-    const type = e.target.value;
-    const sizeSelect = document.getElementById('keyboardSize');
-    
-    // Sync the selected layout with the type
-    const options = sizeSelect.options;
-    let foundValidOption = false;
-    
-    for (let i = 0; i < options.length; i++) {
-        const option = options[i];
-        if (option.dataset.type === type) {
-            option.style.display = '';
-            if (!foundValidOption) {
-                sizeSelect.selectedIndex = i;
-                currentLayout = option.value;
-                foundValidOption = true;
+            function handleLayoutTypeChange(e) {
+                const type = e.target.value;
+                const sizeSelect = document.getElementById('keyboardSize');
+                const options = sizeSelect.options;
+
+                // Show only options for selected type
+                for (let i = 0; i < options.length; i++) {
+                    const option = options[i];
+                    if (option.dataset.type === type || option.value === currentLayout) {
+                        option.style.display = '';
+                        if (option.value === currentLayout && option.dataset.type === type) {
+                            sizeSelect.selectedIndex = i;
+                        }
+                    } else {
+                        option.style.display = 'none';
+                    }
+                }
+
+                // Select first visible option if current is hidden
+                if (options[sizeSelect.selectedIndex].style.display === 'none') {
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].style.display !== 'none') {
+                            sizeSelect.selectedIndex = i;
+                            currentLayout = options[i].value;
+                            break;
+                        }
+                    }
+                }
+
+                drawKeyboard();
             }
-        } else {
-            option.style.display = 'none';
-        }
-    }
-    
-    drawKeyboard();
-}
-            
+
             function handleSizeChange(e) {
                 currentLayout = e.target.value;
                 drawKeyboard();
             }
-            
+
             function handleColorGroupClick(e) {
                 document.querySelectorAll('.color-group').forEach(g => g.classList.remove('active'));
                 e.currentTarget.classList.add('active');
                 currentColorGroup = e.currentTarget.dataset.group;
             }
-            
+
             function handleColorChange(e) {
                 const colorInput = e.target;
                 const previewId = colorInput.id + 'Preview';
                 const valueId = colorInput.id + 'Value';
-                
+
                 if (document.getElementById(previewId)) {
                     document.getElementById(previewId).style.backgroundColor = colorInput.value;
                 }
@@ -1191,23 +1198,21 @@ function handleLayoutTypeChange(e) {
                 }
                 drawKeyboard();
             }
-            
+
             function handleLegendPositionChange(e) {
                 document.querySelectorAll('.layout-option').forEach(opt => opt.classList.remove('active'));
                 e.currentTarget.classList.add('active');
                 drawKeyboard();
             }
-            
-document.getElementById('textColor').addEventListener('input', function(e) {
-    const color = e.target.value;
-    document.getElementById('textColorValue').textContent = 
-        color === '#000000' ? 'Black' : 
-        color === '#ffffff' ? 'White' : 
-        color.toUpperCase();
-    document.getElementById('textColorValue').style.color = color;
-    drawKeyboard();
-});
-            
+
+            function handleTextColorChange(e) {
+                const colorValue = e.target.value === '#000000' ? 'Black' : 
+                                  e.target.value === '#ffffff' ? 'White' : 
+                                  e.target.value.toUpperCase();
+                document.querySelector('.color-value').textContent = colorValue;
+                drawKeyboard();
+            }
+
             function handleImageUpload(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -1223,34 +1228,32 @@ document.getElementById('textColor').addEventListener('input', function(e) {
                     reader.readAsDataURL(file);
                 }
             }
-            
+
             function handleRemoveImage() {
                 uploadedImage = null;
                 document.getElementById('keyboardImage').value = '';
                 drawKeyboard();
             }
-            
-document.getElementById('textColor').addEventListener('input', function(e) {
-    const color = e.target.value;
-    document.getElementById('textColorValue').textContent = 
-        color === '#000000' ? 'Black' : 
-        color === '#ffffff' ? 'White' : 
-        color.toUpperCase();
-    document.getElementById('textColorValue').style.color = color;
-    drawKeyboard();
-});
-            
+
+            function handleCustomTextColorChange(e) {
+                const colorValue = e.target.value === '#000000' ? 'Black' : 
+                                  e.target.value === '#ffffff' ? 'White' : 
+                                  e.target.value.toUpperCase();
+                document.querySelectorAll('.color-value')[1].textContent = colorValue;
+                drawKeyboard();
+            }
+
             function handleDownload() {
                 const link = document.createElement('a');
                 link.download = 'keyboard-design.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             }
-            
+
             function handleSliderChange(e) {
                 const sliderId = e.target.id;
                 const valueElement = document.getElementById(sliderId + 'Value');
-                
+
                 if (valueElement) {
                     if (sliderId === 'textSize' || sliderId === 'customTextSize') {
                         valueElement.textContent = e.target.value + 'px';
@@ -1260,6 +1263,8 @@ document.getElementById('textColor').addEventListener('input', function(e) {
                 }
                 drawKeyboard();
             }
+
+            // First define all layout creation functions
 function createISO109Layout() {
     return {
         name: "ISO 109-key",
